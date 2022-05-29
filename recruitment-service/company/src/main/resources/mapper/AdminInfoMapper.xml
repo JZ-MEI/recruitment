@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.meijinzhi.company.dao.AdminInfoMapper">
+<select id="selectByUsername" resultType="com.meijinzhi.company.entity.AdminInfo">
+    select ai.*
+    from admin_info ai
+    where ai.admin_name = #{username}
+</select>
+</mapper>

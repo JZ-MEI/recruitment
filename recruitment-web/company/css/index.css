@@ -1,0 +1,52 @@
+.content{
+    width: 90%;
+    margin: 0 auto;
+    /* border: #000 1px solid; */
+}
+#content{
+    width: 100%;
+    height: 570px;
+}
+.operationButton{
+    float: left;
+}
+.input{
+    width: 200px;
+    height: 28px;
+    float: left;
+    margin-right: 10px;
+    border: unset;
+    margin-top: 0px;
+}
+.searchDiv{
+    border: gray 1px solid;
+    margin-left: 10px;
+    padding-left: 13px;
+    padding-right: 10px;
+    float: left;
+    background-color: #fff;
+    border-radius: 15px;
+    height: 30px;
+}
+.left{
+    width: 90%;
+    float: left;
+    border-radius: unset;
+}
+.right{
+    width: 10%;
+    float: left;
+    border-radius: unset;
+}
+.btn{
+    height: 27px;
+    line-height: 27px;
+}
+.updateDetail{
+    height: 24.5px;
+    line-height: 24.5px;
+}
+.search{
+    background-color: unset;
+    border: unset;
+}

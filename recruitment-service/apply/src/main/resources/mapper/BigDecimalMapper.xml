@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.meijinzhi.apply.dao.BigDecimalMapper">
+    <select id="getBigDecimal" resultType="com.meijinzhi.apply.entity.PostInfo">
+        select distinct *
+        from post_info
+        where post like CONCAT('%', #{result}, '%')
+           or work_describe like CONCAT('%', #{result}, '%')
+           or post_type like CONCAT('%', #{result}, '%')
+    </select>
+    <select id="getByUsername" resultType="com.meijinzhi.apply.entity.BigDecimal">
+        select *
+        from big_decimal
+        where username = #{username}
+    </select>
+</mapper>

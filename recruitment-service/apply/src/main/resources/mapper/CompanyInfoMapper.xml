@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.meijinzhi.apply.dao.CompanyInfoMapper">
+    <select id="selectLogoById" resultType="java.lang.String">
+        select ci.logo
+        from company_info ci
+        where ci.id = #{id}
+    </select>
+    <select id="selectCompanyNameById" resultType="java.lang.String">
+        select ci.company_name
+        from company_info ci
+        where ci.id = #{id}
+    </select>
+    <select id="companyName" resultType="java.lang.String">
+        select username from company_info where id=#{companyId}
+    </select>
+</mapper>

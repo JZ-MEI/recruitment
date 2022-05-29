@@ -4,6 +4,9 @@ import lombok.Data;
 
 @Data
 public class UserInfo {
+    /**
+     * 用户ID
+     */
     private long id;
     /**
      * 用户名
@@ -14,15 +17,15 @@ public class UserInfo {
      */
     private String password;
     /**
-     * 电子邮箱
+     * 邮箱
      */
     private String email;
     /**
-     * 照片
+     * 照片，Base64
      */
     private String photo;
     /**
-     * 在线简历
+     * 电子简历，Base64
      */
     private String resume;
 }

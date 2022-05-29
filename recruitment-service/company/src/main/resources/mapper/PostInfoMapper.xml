@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.meijinzhi.company.dao.PostInfoMapper">
+    <select id="getMyPost" resultType="com.meijinzhi.company.entity.PostInfo">
+        select pi.*
+        from post_info pi
+        where pi.company_id = #{id}
+        <if test="keyWord!=null and keyWord!=''">
+            and pi.post like CONCAT('%',#{keyWord},'%')
+        </if>
+        limit #{start},#{limit}
+    </select>
+    <select id="getPostCount" resultType="com.meijinzhi.company.entity.PostInfo">
+        select pi.*
+        from post_info pi
+        where pi.company_id = #{id}
+        <if test="keyWord!=null and keyWord!=''">
+            and pi.post like CONCAT('%',#{keyWord},'%')
+        </if>
+    </select>
+</mapper>

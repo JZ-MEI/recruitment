@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.meijinzhi.company.dao.CompanyInfoMapper">
+    <select id="selectByUsername" resultType="com.meijinzhi.company.entity.CompanyInfo">
+        select ci.*
+        from company_info ci
+        where ci.username = #{username}
+    </select>
+    <insert id="signIn" parameterType="java.lang.String">
+        insert into company_info(username, password, email)
+        values (#{username}, #{password}, #{email})
+    </insert>
+    <update id="updatePassword">
+        update company_info
+        set password=#{password}
+        where username = #{username}
+    </update>
+    <select id="getCompanyInfo" resultType="com.meijinzhi.company.entity.CompanyInfo">
+        select *
+        from company_info
+        where is_audit = '0'
+            limit #{start}
+            , #{limit}
+    </select>
+    <select id="getCompanyInfoCount" resultType="com.meijinzhi.company.entity.CompanyInfo">
+        select *
+        from company_info
+        where is_audit = '0'
+    </select>
+</mapper>

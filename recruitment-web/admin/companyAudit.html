@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <link rel="stylesheet" href="layui/css/layui.css" />
+    <link rel="stylesheet" href="css/index.css">
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+    <div class="table">
+        <table id="companyAudit" lay-filter="companyAudit"></table>
+    </div>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container operationButton">
+            <button class="layui-btn layui-btn-sm" lay-event="add" id="add">添加</button>
+        </div>
+        <div class="searchDiv">
+            <input class="layui-input input" id="input">
+            <button class="layui-icon layui-icon-search search" id="search"></button>
+        </div>
+    </script>
+    <script>
+        layui.use(['jquery', 'element', 'form', 'table', 'upload', 'layer'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                table = layui.table,
+                upload = layui.upload,
+                layer = layui.layer;
+            var username = window.sessionStorage.getItem("username");
+            table.render({
+                elem: '#companyAudit'
+                , toolbar: '#toolbarDemo'
+                , parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.responseCode, //解析接口状态
+                        "count": res.count,
+                        "data": res.data
+                    };
+                }
+                , height: 522
+                , url: 'admin/getCompany?username=' + username //数据接口
+                , id: 'company'
+                , page: true //开启分页
+                , cols: [[ //表头
+                    { field: 'companyName', title: '企业名称', align: 'center' },
+                    { field: 'address', title: '公司地址', align: 'center' },
+                    {
+                        field: 'logo',
+                        title: '公司标志',
+                        align: 'center',
+                        templet: function (res) {
+                            return '<img src=' + res.logo + ' class="logo" width="30px" height="30px">'
+                        }
+                    },
+                    {
+                        field: 'license',
+                        title: '营业执照',
+                        align: 'center',
+                        templet: function (res) {
+                            return '<img src=' + res.license + ' class="license" width="30px" height="30px">'
+                        }
+                    },
+                    {
+                        type: "normal",
+                        title: "操作",
+                        align: 'center',
+                        templet: function (res) {
+                            return '<button class="layui-btn layui-btn-sm audit" id=' + res.id + '>审核通过</button>'
+                        }
+                    }
+                ]]
+            });
+            $(document).on('click', '.audit', function () {
+                var date = $(this).attr('id');
+            });
+            $(document).on('click', '.logo', function () {
+                var date = $(this).attr('src');
+                // console.log()
+                layer.open({
+                    type: 1,
+                    title:'企业LOGO',
+                    content: '<img src='+date+' width="400px" height="400px" style="margin-left: 50px">', //这里content是一个普通的String
+                    area: ['500px', '500px']
+                });
+            })
+            $(document).on('click', '.license', function () {
+                var date = $(this).attr('src');
+                // console.log()
+                layer.open({
+                    type: 1,
+                    title:'营业执照',
+                    content: '<img src='+date+' width="400px" height="400px" style="margin-left: 50px">', //这里content是一个普通的String
+                    area: ['500px', '500px']
+                });
+            })
+        });
+    </script>
+</body>
+
+</html>

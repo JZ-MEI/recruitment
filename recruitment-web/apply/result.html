@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/result.css">
+    <script src="layui/layui.js"></script>
+    <script src="js/config.js"></script>
+    <div class="nav">
+        <ul class="layui-nav nav-left" lay-filter="">
+            <div class="home">
+                <li class="layui-nav-item item"><a href="index.html" class="layui-icon layui-icon-home"> 首页</a></li>
+            </div>
+        </ul>
+        <ul class="layui-nav nav-right" lay-filter="user">
+            <div class="login" id="login">
+                <li class="layui-nav-item item-left">
+                    <a href="login.html">登录</a>
+                </li>
+                <li class="layui-nav-item item-left">
+                    <a href="register.html">注册</a>
+                </li>
+            </div>
+            <div class="login" id="myInfo">
+                <li class="layui-nav-item item-left"><a href="javascript:;" id="username">我的</a>
+                    <dl class="layui-nav-child child">
+                        <dd><a href="user.html">我的简历</a></dd>
+                        <dd><a href="cartAndCollection.html#lay-id=collection">投递记录</a></dd>
+                        <dd><a href="javascript:;" id="logout">退出登录</a></dd>
+                    </dl>
+                </li>
+            </div>
+        </ul>
+    </div><br>
+    <div class="head-div">
+        <img src="img/logo.png" width="50px" class="logo">
+        <div class="search-div">
+            <button class="layui-btn layui-btn-primary layui-icon layui-icon-search search" id="search"></button>
+            <input type="text" class="layui-input input" id="keyWord" value="">
+        </div>
+    </div><br>
+    <div class="middle">
+        <div class="result" id="result">
+
+        </div>
+    </div>
+    <script>
+        layui.use(['element', 'carousel', 'jquery',], function () {
+            var $ = layui.$,
+                element = layui.element,
+                carousel = layui.carousel,
+                jquery = layui.jquery;
+            var user = sessionStorage.getItem("username");
+            // document.getElementById("keyWord").value = keyWord;
+            if (user != null) {
+                document.getElementById("login").style.display = "none"; //隐藏
+                document.getElementById("myInfo").style.display = ""; //显示
+                document.getElementById("username").innerHTML = user;
+            } else {
+                document.getElementById("myInfo").style.display = "none"; //隐藏
+                document.getElementById("login").style.display = ""; //显示
+            };
+            var para = sessionStorage.getItem("para");
+            var type = getQueryVariable("type");
+            if (getQueryVariable("type") != null) {
+                var type = getQueryVariable("type");
+                $.get('index/post?type=' + type, function (res) {
+                    for (var i = 0; i < res.data.length; i++) {
+                        jquery("#result").append(' <a class="postInfo" id=' + res.data[i].id + '><img src=' + res.data[i].logo + ' alt="" id=' + res.data[i].id + ' width="160px" height="160px" class="picture"><div id=' + res.data[i].id + ' class="postTitle">' + res.data[i].post + '</div><br><div class="companyName" id=' + res.data[i].id + '>' + res.data[i].companyName + '</div><span class="price" id=' + res.data[i].id + '>￥' + res.data[i].pay + '元/月</span><span class="postType" id=' + res.data[i].id + '>职位类型：' + res.data[i].postType + '</span></a>');
+                    }
+                });
+            }else{
+                var keyWord = getQueryVariable("keyWord");
+                document.getElementById("keyWord").value=decodeURIComponent(keyWord);
+                $.get('index/post?keyWord=' + keyWord, function (res) {
+                    for (var i = 0; i < res.data.length; i++) {
+                        jquery("#result").append(' <a class="postInfo" id=' + res.data[i].id + '><img src=' + res.data[i].logo + ' alt="" id=' + res.data[i].id + ' width="160px" height="160px" class="picture"><div id=' + res.data[i].id + ' class="postTitle">' + res.data[i].post + '</div><br><div class="companyName" id=' + res.data[i].id + '>' + res.data[i].companyName + '</div><span class="price" id=' + res.data[i].id + '>￥' + res.data[i].pay + '元/月</span><span class="postType" id=' + res.data[i].id + '>职位类型：' + res.data[i].postType + '</span></a>');
+                    }
+                });
+            }
+
+            $(document).on("click", ".postInfo", function (e) {
+                sessionStorage.setItem('postId', e.target.id);
+                window.location.href = 'postDetail.html';
+            })
+            function getQueryVariable(variable) {
+                var query = window.location.search.substring(1);
+                var vars = query.split("&");
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split("=");
+                    if (pair[0] == variable) { return pair[1]; }
+                }
+                return null;
+            }
+            $(document).on("click", "#search", function () {
+                $.get('index/addDecimal?result='+document.getElementById("keyWord").value+'&username='+user);
+                $.get('index/post?keyWord=' +document.getElementById("keyWord").value , function (res) {
+                    jquery("#result").empty();
+                    for (var i = 0; i < res.data.length; i++) {
+                        jquery("#result").append(' <a class="postInfo" id=' + res.data[i].id + '><img src=' + res.data[i].logo + ' alt="" id=' + res.data[i].id + ' width="160px" height="160px" class="picture"><div id=' + res.data[i].id + ' class="postTitle">' + res.data[i].post + '</div><br><div class="companyName" id=' + res.data[i].id + '>' + res.data[i].companyName + '</div><span class="price" id=' + res.data[i].id + '>￥' + res.data[i].pay + '元/月</span><span class="postType" id=' + res.data[i].id + '>职位类型：' + res.data[i].postType + '</span></a>');
+                    }
+                });
+            });
+            $(document).on('click', '#logout', function (e) {
+                sessionStorage.removeItem("username");
+                location.reload();
+            });
+            var keyWords = document.getElementById("keyWord");
+            keyWords.onkeypress = function (event) {
+                if (event.which === 13) {
+                    $('#search').trigger('click');
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

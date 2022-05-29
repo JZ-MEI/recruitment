@@ -1,0 +1,49 @@
+spring:
+  profiles:
+    active: dev
+
+  datasource:
+    name: emall
+    url: jdbc:mysql://127.0.0.1:3306/recruitment?useUnicode=true&useJDBCCompliantTimezoneShift=true&serverTimezone=UTC&characterEncoding=utf8
+    username: root
+    password: meijinzhi159.
+    type: com.alibaba.druid.pool.DruidDataSource
+    drive-class-name: com.mysql.cj.jdbc.Driver
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+  mail:
+    #QQ邮箱这不用改
+    host: smtp.qq.com
+    #你的邮箱
+    username: 1749092177@qq.com
+    #你的授权码
+    password: mcrwqnnueiwufcci
+    default-encoding: UTF-8
+  redis:
+    #redis服务器地址
+    host: 127.0.0.1
+    #Redis服务器连接端口
+    port: 6379
+    #Redis服务器连接密码（默认为空）
+    jedis:
+      pool:
+        #连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: 1000
+        #连接池最大连接数（使用负值表示没有限制）
+        max-active: 100
+        #连接池中的最大空闲连接
+        max-idle: 20
+        #连接池中的最小空闲连接
+        min-idle: 0
+        #连接超时时间（毫秒）
+    timeout: 60000
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/*.xml
+  type-aliases-package: com.meijinzhi.entity
+  configuration:
+    mapUnderscoreToCamelCase: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+server:
+  port: 8083

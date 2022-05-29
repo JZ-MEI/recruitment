@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/chat.css">
+    <script src="layui/layui.js"></script>
+    <script src="js/config.js"></script>
+    <div class="window">
+        <div class="messageList" id="list">
+        </div>
+        <div class="messageContent" id="message">
+        </div>
+        <div class="messageInput">
+            <div class="textarea-div">
+                <textarea name="" required lay-verify="required" placeholder="请输入" class="layui-textarea textarea"
+                    id="input"></textarea>
+            </div>
+            <div class="btn-div">
+                <button class="layui-btn btn" id="send">发送</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use(['element', 'carousel', 'jquery', 'layer'], function () {
+            var $ = layui.$,
+                element = layui.element,
+                carousel = layui.carousel,
+                jquery = layui.jquery,
+                layer = layui.layer;
+            var webSocket;
+            var commWebSocket;
+            if ("WebSocket" in window) {
+                webSocket = new WebSocket("ws://192.168.10.111:8082/websocket/" + sessionStorage.getItem("username"));
+                //连通之后的回调事件
+                webSocket.onopen = function () {
+                    console.log("已经连通了websocket");
+                    // setMessageInnerHTML("您好，很高兴为您服务");
+                };
+                var fromuser;
+                //接收后台服务端的消息
+                var input = document.getElementById("input").value;
+                webSocket.onmessage = function (evt) {
+                    var received_msg = evt.data;
+                    console.log("数据已接收:" + received_msg);
+                    var obj = JSON.parse(received_msg);
+                    // console.log("可以解析成json:" + obj.messageType);
+                    if (obj.messageType == 4) {
+                        var list = '<div class="messageUser" id="fromUser">' + obj.fromusername + '</div>'
+                        $("#list").append(list);
+                        this.fromuser = obj.fromusername;
+                        var message = '<div class="receive"><div class="fromuser">' + obj.fromusername + '</div><div class="receiveMsg">' + obj.textMessage + '</div><div class="clearBoth"></div></div>'
+                        document.getElementById('message').innerHTML += message;
+                        // setMessageInnerHTML(obj.fromusername + ":" + obj.textMessage);
+                    }
+                };
+
+                //连接关闭的回调事件
+                webSocket.onclose = function () {
+                    console.log("连接已关闭...");
+                    setMessageInnerHTML("连接已经关闭....");
+                };
+            } else {
+                alert("您的浏览器不支持 WebSocket!");
+            }
+
+            //将消息显示在网页上
+            function setMessageInnerHTML(innerHTML) {
+                document.getElementById('message').innerHTML += innerHTML + '<br/>';
+            }
+
+            function closeWebSocket() {
+                webSocket.close();
+            }
+
+            $(document).on("click", "#send", function () {
+                var to = document.getElementById("fromUser").innerHTML;
+                // alert();
+                var message = '<div class="send"><div class="username">' + sessionStorage.getItem("username") + '</div><div class="sendMsg">' + document.getElementById("input").value + '</div><div class="clearBoth"></div></div>'
+                document.getElementById('message').innerHTML += message;
+                // setMessageInnerHTML(sessionStorage.getItem("username") + ":" + document.getElementById("input").value);
+                var message = {
+                    "message": document.getElementById("input").value,
+                    "username": sessionStorage.getItem("username"),
+                    "to": to
+                };
+                webSocket.send(JSON.stringify(message));
+                document.getElementById("input").value = "";
+            });
+        });
+    </script>
+</body>
+
+</html>

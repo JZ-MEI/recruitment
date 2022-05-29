@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.meijinzhi.apply.dao.PostInfoMapper">
+    <select id="getAllPostByType" resultType="com.meijinzhi.apply.entity.PostInfo">
+        select pi.*
+        from post_info pi
+        <if test="type!=null and type!=''">
+            where pi.post_type=#{type}
+        </if>
+    </select>
+    <select id="getAllPost" resultType="com.meijinzhi.apply.entity.PostInfo">
+        select pi.*
+        from post_info pi
+    </select>
+    <select id="getPostByKeyWord" resultType="com.meijinzhi.apply.entity.PostInfo">
+        select pi.*
+        from post_info pi
+        where pi.post like CONCAT('%', #{keyWord}, '%')
+           or pi.work_describe like CONCAT('%', #{keyWord}, '%')
+    </select>
+    <select id="getPostInfoById" resultType="com.meijinzhi.apply.entity.PostInfo">
+        select *
+        from post_info
+        where id = #{postId}
+    </select>
+</mapper>

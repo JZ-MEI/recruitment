@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.meijinzhi.apply.dao.CityMapper">
+    <select id="getHotCity" resultType="com.meijinzhi.apply.entity.City">
+        select c.*
+        from city c
+        where c.is_hot = 1
+    </select>
+    <select id="getAllProvincial" resultType="com.meijinzhi.apply.entity.Provincial">
+        select p.*
+        from provincial p
+    </select>
+    <select id="getAllCity" resultType="com.meijinzhi.apply.entity.City">
+        select c.*
+        from city c
+    </select>
+</mapper>

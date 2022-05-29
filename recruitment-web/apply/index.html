@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主页</title>
+</head>
+
+<body>
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+    <link rel="stylesheet" href="layui/css/layui.css" />
+    <link rel="stylesheet" href="css/index.css" />
+    <ul class="layui-nav nav-left" lay-filter="">
+        <div class="home">
+            <li class="layui-nav-item item"><a href="index.html" class="layui-icon layui-icon-home"> 首页</a></li>
+        </div>
+    </ul>
+    <ul class="layui-nav nav-right" lay-filter="user">
+        <div class="login" id="login">
+            <li class="layui-nav-item item-left">
+                <a href="login.html">登录</a>
+            </li>
+            <li class="layui-nav-item item-left">
+                <a href="register.html">注册</a>
+            </li>
+        </div>
+        <div class="login" id="myInfo">
+            <li class="layui-nav-item item-left"><a href="javascript:;" id="username">我的</a>
+                <dl class="layui-nav-child child">
+                    <dd><a href="user.html">我的简历</a></dd>
+                    <dd><a href="cartAndCollection.html#lay-id=collection">投递记录</a></dd>
+                    <dd><a href="javascript:;" id="logout">退出登录</a></dd>
+                </dl>
+            </li>
+        </div>
+    </ul>
+    </div><br>
+    <div class="head-div">
+        <img src="img/logo.png" width="50px" class="logo">
+        <div class="search-div">
+            <button class="layui-btn layui-btn-primary layui-icon layui-icon-search search" id="search"></button>
+            <input type="text" class="layui-input input" id="keyWord">
+        </div>
+    </div>
+    <br>
+    <div class="middle">
+        <div class="type-div">
+            <div class="type type1" id="type0">
+                <div class="type-title">IT·互联网</div>
+                <div class="right"><i class="layui-icon layui-icon-right"></i></div>
+            </div>
+            <div class="type type2" id="type1">
+                <div class="type-title">金融</div>
+                <div class="right"><i class="layui-icon layui-icon-right"></i></div>
+            </div>
+            <div class="type type3" id="type2">
+                <div class="type-title">房地产·建筑</div>
+                <div class="right"><i class="layui-icon layui-icon-right"></i></div>
+            </div>
+            <div class="type type4" id="type3">
+                <div class="type-title">教育培训</div>
+                <div class="right"><i class="layui-icon layui-icon-right"></i></div>
+            </div>
+            <div class="type type5" id="type4">
+                <div class="type-title">娱乐传媒</div>
+                <div class="right"><i class="layui-icon layui-icon-right"></i></div>
+            </div>
+            <div class="type type6" id="type5">
+                <div class="type-title">医疗健康</div>
+                <div class="right"><i class="layui-icon layui-icon-right"></i></div>
+            </div>
+            <div class="type type7" id="type6">
+                <div class="type-title">法律咨询</div>
+                <div class="right"><i class="layui-icon layui-icon-right"></i></div>
+            </div>
+            <div class="type type8" id="type7">
+                <div class="type-title">供应链·物流</div>
+                <div class="right"><i class="layui-icon layui-icon-right"></i></div>
+            </div>
+            <div class="type type9" id="type8">
+                <div class="type-title">采购贸易</div>
+                <div class="right"><i class="layui-icon layui-icon-right"></i></div>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+        <div class="layui-carousel carousel" id="carousel1">
+            <div carousel-item class="carousel-item" id="carousel">
+                <div>
+                    <img src="" width="100%" height="100%" id="0">
+                </div>
+                <div>
+                    <img src="" width="100%" height="100%" id="1">
+                </div>
+                <div>
+                    <img src="" width="100%" height="100%" id="2">
+                </div>
+                <div>
+                    <img src="" width="100%" height="100%" id="3">
+                </div>
+                <div>
+                    <img src="" width="100%" height="100%" id="4">
+                </div>
+                <div>
+                    <img src="" width="100%" height="100%" id="5">
+                </div>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="bottom-title">推荐职位</div>
+        </div>
+        <div class="post" id="post">
+        </div>
+    </div>
+</body>
+<script>
+    //注意：导航 依赖 element 模块，否则无法进行功能性操作
+    layui.use(['jquery', 'element', 'laytpl', 'laypage', 'carousel'], function () {
+        var $ = layui.$,
+            laytpl = layui.laytpl,
+            laypage = layui.laypage,
+            jquery = layui.jquery,
+            element = layui.element,
+            carousel = layui.carousel;
+        var user = sessionStorage.getItem("username");
+        // var myInfo = '<li class="layui-nav-item item-left"><a href="javascript:;">我的</a></li>'
+        if (user != null) {
+            document.getElementById("login").style.display = "none"; //隐藏
+            document.getElementById("myInfo").style.display = ""; //显示
+            document.getElementById("username").innerHTML = user;
+        } else {
+            document.getElementById("myInfo").style.display = "none"; //隐藏
+            document.getElementById("login").style.display = ""; //显示
+        }
+        carousel.render({
+            elem: '#carousel1'
+            , width: '75%' //设置容器宽度
+            , height: '370px'
+            , arrow: 'always' //始终显示箭头
+        });
+        $.get('index/carousel', function (res) {
+            for (var i = 0; i < res.data.length; i++) {
+                document.getElementById(i).src = res.data[i].img;
+            }
+        });
+        $.get('index/guess?username=' + user, function (res) {
+            for (var i = 0; i < res.data.length; i++) {
+                jquery("#post").append(' <a class="postInfo" id=' + res.data[i].id + '><img src=' + res.data[i].logo + ' alt="" id=' + res.data[i].id + ' width="110px" height="110px" class="picture"><div id=' + res.data[i].id + ' class="postTitle">' + res.data[i].post + '</div><br><div class="companyName" id=' + res.data[i].id + '>' + res.data[i].companyName + '</div><span class="price" id=' + res.data[i].id + '>￥' + res.data[i].pay + '元/月</span><span class="postType" id=' + res.data[i].id + '>' + res.data[i].postType + '</span></a>');
+            }
+        });
+        $(document).on("click", "#search", function () {
+            var keyWord = document.getElementById("keyWord").value;
+            $.get('index/addDecimal?result=' + keyWord + '&username=' + user);
+            window.location.href = "result.html?keyWord=" + keyWord;
+        })
+        $(document).on("click", ".postInfo", function (e) {
+            sessionStorage.setItem('postId', e.target.id);
+            window.location.href = 'postDetail.html';
+        })
+        $(document).on('click', '#type0', function (e) {
+            $.get('index/addDecimal?result=IT·互联网&username=' + user);
+            window.location.href = "result.html?type=IT·互联网";
+        });
+        $(document).on('click', '#type1', function (e) {
+            $.get('index/addDecimal?result=金融&username=' + user);
+            window.location.href = "result.html?type=金融";
+        });
+        $(document).on('click', '#type2', function (e) {
+            $.get('index/addDecimal?result=房地产·建筑&username=' + user);
+            window.location.href = "result.html?type=房地产·建筑";
+        });
+        $(document).on('click', '#type3', function (e) {
+            $.get('index/addDecimal?result=教育培训&username=' + user);
+            window.location.href = "result.html?type=教育培训";
+        });
+        $(document).on('click', '#type4', function (e) {
+            $.get('index/addDecimal?result=娱乐传媒&username=' + user);
+            window.location.href = "result.html?type=娱乐传媒";
+        });
+        $(document).on('click', '#type5', function (e) {
+            $.get('index/addDecimal?result=医疗健康&username=' + user);
+            window.location.href = "result.html?type=医疗健康";
+        });
+        $(document).on('click', '#type6', function (e) {
+            $.get('index/addDecimal?result=法律咨询&username=' + user);
+            window.location.href = "result.html?type=法律咨询";
+        });
+        $(document).on('click', '#type7', function (e) {
+            $.get('index/addDecimal?result=供应链·物流&username=' + user);
+            window.location.href = "result.html?type=供应链·物流";
+        });
+        $(document).on('click', '#type8', function (e) {
+            $.get('index/addDecimal?result=采购贸易&username=' + user);
+            window.location.href = "result.html?type=采购贸易";
+        });
+        $(document).on('click', '#logout', function (e) {
+            sessionStorage.removeItem("username");
+            location.reload();
+        });
+        var keyWords = document.getElementById("keyWord");
+        keyWords.onkeypress = function (event) {
+            if (event.which === 13) {
+                $('#search').trigger('click');
+            }
+        }
+    });
+</script>
+
+</html>

@@ -1,0 +1,111 @@
+.window{
+    width: 1000px;
+    height: 500px;
+    margin: 30px auto;
+    border: #efefef 1px solid;
+    
+}
+.messageList{
+    width: 298px;
+    border-right: #efefef 1px solid;
+    height: 498px;
+    float: left;
+}
+.messageContent{
+    width: 701px;
+    border-bottom: #efefef 1px solid;
+    height: 398px;
+    float: left;
+    overflow :auto;
+}
+.messageInput{
+    width: 701px;
+    height: 100px;
+    float: left;
+}
+.textarea-div{
+    width: 631px;
+    float: left;
+}
+.textarea{
+    resize: none;
+    border: unset;
+}
+.btn{
+    width: 70px;
+    height: 100px;
+    background-color: #fff;
+    color: #000;
+}
+.messageUser{
+    /* border: 1px #000 solid !important; */
+    width: 288px !important;
+    height: 40px !important;
+    font-size: 30px;
+    line-height: 30px;
+    padding-left: 10px;
+    padding-top: 10px;
+    background-color: rgb(249, 249, 239);
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+.messageUser:hover{
+    /* border: 1px #000 solid !important; */
+    width: 288px !important;
+    height: 40px !important;
+    font-size: 30px;
+    line-height: 30px;
+    padding-left: 10px;
+    padding-top: 10px;
+    background-color: rgb(249, 249, 239);
+    border-radius: 5px;
+    margin-bottom: 5px;
+    box-shadow: 2px 2px 2px #efefef;
+}
+.receiveMsg{
+    background-color: rgb(255, 255, 255);
+    width: auto;
+    height: auto;
+    padding: 5px 10px;
+    border-radius: 15px;
+    float: left;
+    margin-left: 15px;
+    font-size: 15px;
+    color: #000;
+    border: #e5e5e5 1px solid;
+    /* margin-top: 15px; */
+}
+.receive{
+    /* border: #000 1px solid; */
+    margin-top: 10px;
+}
+.clearBoth{
+    clear: both;
+}
+.fromuser{
+    /* border: #000 1px solid; */
+    margin-left: 15px;
+    text-align: left;
+    font-size: 8px;
+}
+.send{
+    /* border: #000 1px solid; */
+    margin-top: 10px;
+}
+.username{
+    /* border: #000 1px solid; */
+    margin-right: 15px;
+    text-align: right;
+    font-size: 8px;
+}
+.sendMsg{
+    background-color: rgb(17, 203, 0);
+    width: auto;
+    height: auto;
+    padding: 5px 10px;
+    border-radius: 15px;
+    float: right;
+    margin-right: 15px;
+    font-size: 15px;
+    color: #fff;
+}

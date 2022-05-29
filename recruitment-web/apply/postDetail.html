@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>岗位详情</title>
+</head>
+
+<body>
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+    <link rel="stylesheet" href="layui/css/layui.css" />
+    <link rel="stylesheet" href="css/detail.css">
+    <div class="nav">
+        <ul class="layui-nav nav-left" lay-filter="">
+            <div class="home">
+                <li class="layui-nav-item item"><a href="index.html" class="layui-icon layui-icon-home"> 首页</a></li>
+            </div>
+        </ul>
+        <ul class="layui-nav nav-right" lay-filter="user">
+            <div class="login" id="login">
+                <li class="layui-nav-item item-left">
+                    <a href="login.html">登录</a>
+                </li>
+                <li class="layui-nav-item item-left">
+                    <a href="register.html">注册</a>
+                </li>
+            </div>
+            <div class="login" id="myInfo">
+                <li class="layui-nav-item item-left"><a href="javascript:;" id="username">我的</a>
+                    <dl class="layui-nav-child child">
+                        <dd><a href="user.html">我的简历</a></dd>
+                        <dd><a href="cartAndCollection.html#lay-id=collection">投递记录</a></dd>
+                        <dd><a href="javascript:;" id="logout">退出登录</a></dd>
+                    </dl>
+                </li>
+            </div>
+        </ul>
+    </div><br>
+    <div class="head">
+        <div class="right">
+            <div class="title">相似职位</div>
+            <div class="similar" id="similar">
+
+            </div>
+            <div class="clearBoth"></div>
+        </div>
+        <p id="postId" hidden></p>
+        <div class="left">
+            <div class="postInfo">
+                <img src="" alt="" width="180px" height="180px" class="logo" id="logo">
+                <div class="postTitle" id="postTitle"></div>
+                <div class="companyName" id="companyName"></div>
+                <div class="pay" id="pay"></div>
+                <div class="workPlace" id="workPlace"></div>
+                <button class="layui-btn layui-btn-warm contact" id="contact">在线联系</button>
+                <button class="layui-btn layui-btn-normal delivery" id="delivery">投递简历</button>
+                <div class="clearBoth"></div>
+            </div>
+            <p id="companyId" hidden></p>
+            <div class="describe" id="describe">
+                <div id="workDescribe"></div>
+            </div>
+            <div class="clearBoth"></div>
+        </div>
+        <div class="clearBoth"></div>
+    </div>
+    <div id="sendMessage" style="display: none;">
+        <div class="messagecontent" id="message">
+        </div>
+        <div class="text">
+            <input class="layui-input inputMessage layui-input-inline" type="text" id="input">
+            <button class="layui-btn layui-btn-primary btn layui-input-inline" id="send"><i
+                    class="layui-icon layui-icon-release"></i></button>
+        </div>
+    </div>
+</body>
+<script>
+    layui.use(['jquery', 'element', 'laytpl', 'laypage', 'carousel'], function () {
+        var $ = layui.$,
+            laytpl = layui.laytpl,
+            laypage = layui.laypage,
+            jquery = layui.jquery,
+            element = layui.element,
+            carousel = layui.carousel;
+        var user = sessionStorage.getItem("username");
+        // var myInfo = '<li class="layui-nav-item item-left"><a href="javascript:;">我的</a></li>'
+        if (user != null) {
+            document.getElementById("login").style.display = "none"; //隐藏
+            document.getElementById("myInfo").style.display = ""; //显示
+            document.getElementById("username").innerHTML = user;
+        } else {
+            document.getElementById("myInfo").style.display = "none"; //隐藏
+            document.getElementById("login").style.display = ""; //显示
+        }
+        var postId = sessionStorage.getItem("postId");
+        $.get('post/getPostInfo?postId=' + postId, function (res) {
+            document.getElementById('logo').src = res.data.logo;
+            document.getElementById('postTitle').innerHTML = res.data.post;
+            document.getElementById('companyName').innerHTML = res.data.companyName;
+            document.getElementById('pay').innerHTML = '￥' + res.data.pay + '元/月';
+            document.getElementById('workPlace').innerHTML = '工作地：' + res.data.workplace;
+            document.getElementById('describe').innerHTML = '<div class="requireTitle">岗位要求：</div><div class="require">' + res.data.workDescribe + "</div>";
+            var type = res.data.postType;
+            $.get('post/getSimilarPost?type=' + type, function (res) {
+                for (var i = 0; i < res.data.length; i++) {
+                    jquery("#similar").append(' <a class="postInfoS" id=' + res.data[i].id + '><img src=' + res.data[i].logo + ' alt="" id=' + res.data[i].id + ' width="110px" height="110px" class="picture"><div id=' + res.data[i].id + ' class="postTitleS">' + res.data[i].post + '</div><br><div class="companyNameS" id=' + res.data[i].id + '>' + res.data[i].companyName + '</div><span class="priceS" id=' + res.data[i].id + '>￥' + res.data[i].pay + '元/月</span><span class="postTypeS" id=' + res.data[i].id + '>' + res.data[i].postType + '</span></a>');
+                }
+            });
+            document.getElementById('postId').innerHTML
+            document.getElementById('companyId').innerHTML = res.data.companyId;
+        });
+        $(document).on("click", ".postInfoS", function (e) {
+            sessionStorage.setItem('postId', e.target.id);
+            window.location.href = 'postDetail.html';
+        })
+        $(document).on('click', '#contact', function () {
+            layer.open({
+                type: 1,
+                title: false,
+                area: ['500px', '450px']
+                , content: $("#sendMessage")
+            });
+        });
+        $(document).on('click', '#logout', function (e) {
+            sessionStorage.removeItem("username");
+            location.reload();
+        });
+        var webSocket;
+        var commWebSocket;
+        if ("WebSocket" in window) {
+            webSocket = new WebSocket("ws://192.168.10.111:8082/websocket/" + sessionStorage.getItem("username"));
+            //连通之后的回调事件
+            webSocket.onopen = function () {
+                console.log("已经连通了websocket");
+                var message = '<div class="receive"><div class="fromuser">系统消息</div><div class="receiveMsg">连接成功</div><div class="clearBoth"></div></div>'
+                document.getElementById('message').innerHTML += message;
+            };
+
+            //接收后台服务端的消息
+            var input = document.getElementById("input").value;
+            webSocket.onmessage = function (evt) {
+                var received_msg = evt.data;
+                console.log("数据已接收:" + received_msg);
+                var obj = JSON.parse(received_msg);
+                console.log("可以解析成json:" + obj.messageType);
+                if (obj.messageType == 4) {
+                    var message = '<div class="receive"><div class="fromuser">' + obj.fromusername + '</div><div class="receiveMsg">' + obj.textMessage + '</div><div class="clearBoth"></div></div>'
+                    document.getElementById('message').innerHTML += message;
+                    // setMessageInnerHTML(obj.fromusername + ":" + obj.textMessage);
+                }
+            };
+
+            //连接关闭的回调事件
+            webSocket.onclose = function () {
+                console.log("连接已关闭...");
+                setMessageInnerHTML("连接已经关闭....");
+            };
+        } else {
+            // 浏览器不支持 WebSocket
+            alert("您的浏览器不支持 WebSocket!");
+        }
+
+        //将消息显示在网页上
+        function setMessageInnerHTML(innerHTML) {
+            document.getElementById('message').innerHTML += innerHTML + '<br/>';
+        }
+
+        function closeWebSocket() {
+            webSocket.close();
+        }
+        $(document).on("click", "#send", function () {
+            // var to;
+            var company = document.getElementById('companyId').innerHTML;
+            // alert(company)
+            $.get("post/getCompanyByUserName?companyId=" + company, function getUsername(res) {
+                var to = res.data;
+                // alert(to);
+                var message = '<div class="send"><div class="username">' + sessionStorage.getItem("username") + '</div><div class="sendMsg">' + document.getElementById("input").value + '</div><div class="clearBoth"></div></div>'
+                document.getElementById('message').innerHTML += message;
+                // setMessageInnerHTML(sessionStorage.getItem("username") + ":" + document.getElementById("input").value);
+                var message = {
+                    "message": document.getElementById("input").value,
+                    "username": sessionStorage.getItem("username"),
+                    "to": to
+                };
+                webSocket.send(JSON.stringify(message));
+                document.getElementById("input").value = "";
+            })
+        });
+        $(document).on("click", "#delivery", function () {
+            $.get("post/sendApply?username=" + user + '&postId=' + postId,function(res){
+                if(res.responseCode==0000){
+                    layer.msg("投递成功")
+                }
+            })
+        });
+    });
+</script>
+
+</html>

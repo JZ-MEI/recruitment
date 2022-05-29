@@ -1,0 +1,46 @@
+.login {
+    width: 500px;
+    height: 300px;
+    margin: 200px auto;
+    background-color: white;
+    border-radius: 20px;
+}
+
+.form {
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 80px;
+    width: 365px;
+}
+
+.body {
+    background-image: url(../template/login.jpg)
+}
+
+.icon {
+    width: 30px !important;
+    box-sizing: unset !important;
+    height: 25px !important;
+    float: left;
+}
+
+.text {
+    width: 300px;
+    float: left;
+}
+
+.button {
+    margin: 0 auto;
+    width: 210px;
+    margin-top: 30px !important;
+}
+
+body {
+    overflow-y: hidden;
+}
+.btn{
+    width: 94px;
+}
+.text-input{
+    height: 43px;
+}

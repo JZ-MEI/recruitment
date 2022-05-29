@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <link rel="stylesheet" href="layui/css/layui.css" />
+    <link rel="stylesheet" href="css/index.css">
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+    <ul class="layui-nav left" lay-filter="">
+        <li class="layui-nav-item">
+            <a
+                href="javascript:(function(){window.top.document.getElementById('content').src='receiveResume.html';})();">已收简历</a>
+        </li>
+        <li class="layui-nav-item layui-this">
+            <a
+                href="javascript:(function(){window.top.document.getElementById('content').src='myPost.html';})();">我的岗位</a>
+        </li>
+        <li class="layui-nav-item">
+            <a
+                href="javascript:(function(){window.top.document.getElementById('content').src='chat.html';})();">我的消息</a>
+        </li>
+    </ul>
+    <ul class="layui-nav right" lay-filter="">
+        <li class="layui-nav-item">
+            <a href="javascript:;">我的</a>
+            <dl class="layui-nav-child">
+                <!-- 二级菜单 -->
+                <dd><a
+                        href="javascript:(function(){window.top.document.getElementById('content').src='company.html';})();">公司信息</a>
+                </dd>
+                <dd><a href="javascript:;" id="logout">退出登录</a></dd>
+            </dl>
+        </li>
+    </ul>
+    <!-- <div>
+        <iframe src="topleft.html" class="topleft"></iframe>
+    </div>
+    <div>
+        <iframe src="topright.html" frameborder="0" class="topright"></iframe>
+    </div> -->
+    <div class="content">
+        <iframe src="myPost.html" frameborder="0" id="content"></iframe>
+    </div>
+    <script>
+        layui.use(['element', 'carousel', 'jquery', 'layer'], function () {
+            var $ = layui.$,
+                element = layui.element,
+                carousel = layui.carousel,
+                jquery = layui.jquery,
+                layer = layui.layer;
+            $(document).on('click', '#logout', function (e) {
+                sessionStorage.removeItem("username");
+                window.location.href="login.html"
+            });
+        });
+    </script>
+</body>
+
+</html>

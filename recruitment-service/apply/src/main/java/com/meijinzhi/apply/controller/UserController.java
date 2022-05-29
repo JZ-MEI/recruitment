@@ -1,5 +1,7 @@
 package com.meijinzhi.apply.controller;
 
+
+import com.meijinzhi.apply.entity.ResumeInfo;
 import com.meijinzhi.apply.entity.UserInfo;
 import com.meijinzhi.apply.service.UserInfoService;
 import com.meijinzhi.apply.util.SendMailUtil;
@@ -8,15 +10,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController{
     private Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     UserInfoService userInfoService;
@@ -24,6 +25,7 @@ public class UserController {
     private SendMailUtil sendMailUtil;
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
+    private static String userId;
 
     @RequestMapping("/clientRegister")
     @CrossOrigin
@@ -103,7 +105,7 @@ public class UserController {
             StringBuilder sb = new StringBuilder();
             sb.append("您的验证码是：").append(verify).append("为保证您的财产安全，请勿将验证码告诉其他人");
             String emailMessage = sb.toString();
-            sendMailUtil.sendMail("1273553264@qq.com", userInfo.getEmail(), "网上商城验证码", emailMessage);
+            sendMailUtil.sendMail("1749092177@qq.com", userInfo.getEmail(), "网上商城验证码", emailMessage);
             redisTemplate.opsForValue().set(userInfo.getEmail(), verify);
             msg.setResponseCode("0000");
             msg.setMessage("发送成功");
@@ -113,4 +115,38 @@ public class UserController {
         }
         return msg;
     }
+    @RequestMapping("/resume")
+    public SendReturnMessage saveResume(ResumeInfo resumeInfo,String[] companyName,String[] startTime,String[] endTime,String[] workDescribe,String username) {
+        SendReturnMessage msg = SendReturnMessage.instance();
+        try{
+            userInfoService.setResume(resumeInfo, companyName, startTime, endTime, workDescribe, username);
+            msg.setResponseCode("0000");
+            msg.setMessage("success");
+        }catch (Exception e){
+            msg.setResponseCode("9999");
+            msg.setMessage("error");
+            logger.info("抛出异常",e);
+        }
+        return msg;
+    }
+    @RequestMapping("/photo")
+    public SendReturnMessage photo(MultipartFile file){
+        SendReturnMessage msg = SendReturnMessage.instance();
+        try{
+            userInfoService.updatePhoto(file);
+            msg.setResponseCode("0000");
+            msg.setMessage("success");
+        }catch (Exception e){
+            msg.setResponseCode("9999");
+            msg.setMessage("error");
+            logger.info("抛出异常",e);
+        }
+        return msg;
+    }
+//    @RequestMapping("/resume")
+//    public SendReturnMessage saveResume(String fields){
+//        SendReturnMessage msg = SendReturnMessage.instance();
+////        logger.info(String.valueOf(jsonObject));
+//        return msg;
+//    }
 }

@@ -1,0 +1,137 @@
+.work-experience{
+    width: 80%;
+    border: #efefef 1px solid;
+    margin: 10px auto;
+}
+.time{
+    width: 100px !important;
+}
+.icon{
+    width: 8px !important;
+    height: 38px !important;
+    line-height: 38px;
+}
+.add{
+    /* border: #000 1px solid; */
+    margin: 0 auto;
+    text-align: center;
+    width: 32px;
+}
+.add-circle{
+    width: 30px !important;
+    height: 30px !important;
+    background-color: unset;
+    border: unset;
+}
+.base-info{
+    width: 80%;
+    border: #efefef 1px solid;
+    margin: 10px auto;
+}
+.button{
+    width: 80%;
+    text-align: center;
+    margin: 0 auto !important;
+}
+.reset{
+    width: 94px;
+}
+.month{
+    text-align: left;
+    padding-left: 0px;
+}
+/* .name{
+    width: 310px;
+    float: left;
+    border: #000 1px solid;
+} */
+.img{
+    float: right;
+    /* border: #000 1px solid; */
+    /* display: block; */
+    width:125px;
+    /* height: 175px; */
+    margin-top: -750px;
+    margin-right: 180px;
+}
+.upload{
+    text-align: center;
+    margin-top: 10px !important;
+}
+.img-preview{
+    width: 125px;
+    height: 176px;
+    /* font-size: 100px; */
+    text-align: center;
+    border: #000 1px solid;
+    line-height: 175px;
+}
+.preview{
+    font-size: 50px;
+}
+/* .sex{
+    width: 310px !important;
+    border: #000 1px solid;
+    margin-top: -300px !important;
+} */
+.nav-left {
+    /* border: #000 1px solid; */
+    height: 30px;
+    background-color: #fcfcfc;
+    width: 50%;
+    float: left;
+}
+
+.item {
+    /* border: #000 1px solid; */
+    height: 30px;
+    line-height: 30px;
+}
+
+a {
+    color: #000 !important;
+    height: 30px;
+    line-height: 30px;
+}
+
+.nav-right {
+    /* border: #000 1px solid; */
+    height: 30px;
+    background-color: #fcfcfc;
+    width: 50%;
+    float: left;
+    /* z-index: 1; */
+}
+
+.item-left {
+    float: right;
+}
+
+.home {
+    margin-left: 30px;
+}
+
+.login {
+    margin-right: 30px;
+}
+
+.layui-nav .layui-this:after,
+.layui-nav-bar {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 5px;
+    background-color: #096ad3;
+    transition: all .2s;
+    -webkit-transition: all .2s;
+    pointer-events: none
+}
+.form{
+    margin-top: 30px;
+}
+.child {
+    margin-top: -30px;
+    margin-left: -15px;
+}

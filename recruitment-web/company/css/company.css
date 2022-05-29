@@ -1,0 +1,21 @@
+.img{
+    /* float: right; */
+    width:125px;
+    /* margin-top: -750px; */
+    /* margin-right: 180px; */
+    margin-left: 110px;
+}
+.upload{
+    text-align: center;
+    margin-top: 10px !important;
+}
+.img-preview{
+    width: 125px;
+    height: 125px;
+    text-align: center;
+    border: #000 1px solid;
+    line-height: 125px;
+}
+.preview{
+    font-size: 50px;
+}

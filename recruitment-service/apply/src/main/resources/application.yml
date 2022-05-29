@@ -16,9 +16,9 @@ spring:
     #QQ邮箱这不用改
     host: smtp.qq.com
     #你的邮箱
-    username: 1273553264@qq.com
+    username: 1749092177@qq.com
     #你的授权码
-    password: ezywncqvxxyogdai
+    password: mcrwqnnueiwufcci
     default-encoding: UTF-8
   redis:
     #redis服务器地址
@@ -44,8 +44,9 @@ mybatis-plus:
   type-aliases-package: com.meijinzhi.entity
   configuration:
     mapUnderscoreToCamelCase: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 server:
-  port: 8080
+  port: 8082
 
 alipay:
   url: https://openapi.alipaydev.com/gateway.do
