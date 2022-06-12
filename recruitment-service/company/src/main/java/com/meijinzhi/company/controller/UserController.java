@@ -13,6 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -103,13 +104,52 @@ public class UserController {
             StringBuilder sb = new StringBuilder();
             sb.append("您的验证码是：").append(verify).append("为保证您的财产安全，请勿将验证码告诉其他人");
             String emailMessage = sb.toString();
-            sendMailUtil.sendMail("1749092177@qq.com", userInfo.getEmail(), "您的验证码是", emailMessage);
+            sendMailUtil.sendMail("1749092177@qq.com", userInfo.getEmail(), "煤气罐招聘验证码", emailMessage);
             redisTemplate.opsForValue().set(userInfo.getEmail(), verify);
             msg.setResponseCode("0000");
             msg.setMessage("发送成功");
         } catch (Exception e) {
             msg.setResponseCode("9999");
             msg.setMessage("发送失败");
+        }
+        return msg;
+    }
+    @RequestMapping("updateCompanyInfo")
+    public SendReturnMessage updateCompanyInfo(CompanyInfo companyInfo) {
+        SendReturnMessage msg = SendReturnMessage.instance();
+        try {
+            companyInfoService.updateCompanyInfo(companyInfo);
+            msg.setResponseCode("0000");
+            msg.setMessage("success");
+        } catch (Exception e) {
+            msg.setResponseCode("9999");
+            msg.setMessage("error");
+        }
+        return msg;
+    }
+    @RequestMapping("setLogo")
+    public SendReturnMessage setLogo(MultipartFile file,String username) {
+        SendReturnMessage msg = SendReturnMessage.instance();
+        try {
+            companyInfoService.updateLogo(file, username);
+            msg.setResponseCode("0000");
+            msg.setMessage("success");
+        } catch (Exception e) {
+            msg.setResponseCode("9999");
+            msg.setMessage("error");
+        }
+        return msg;
+    }
+    @RequestMapping("setLicense")
+    public SendReturnMessage setLicense(MultipartFile file,String username) {
+        SendReturnMessage msg = SendReturnMessage.instance();
+        try {
+            companyInfoService.updateLicense(file, username);
+            msg.setResponseCode("0000");
+            msg.setMessage("success");
+        } catch (Exception e) {
+            msg.setResponseCode("9999");
+            msg.setMessage("error");
         }
         return msg;
     }

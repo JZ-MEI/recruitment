@@ -138,5 +138,19 @@ public class PostController {
         }
         return msg;
     }
-
+    @RequestMapping("/myDelivery")
+    public SendReturnMessage myDelivery(String username,int page,int limit) {
+        SendReturnMessage msg = SendReturnMessage.instance();
+        try{
+            msg.setData(applyRecordService.getMyDelivery(username, page, limit));
+            msg.setCount(applyRecordService.getRecordCount(username));
+            msg.setResponseCode("0");
+            msg.setMessage("success");
+        }catch (Exception e){
+            msg.setResponseCode("9999");
+            msg.setMessage("error");
+            e.printStackTrace();
+        }
+        return msg;
+    }
 }

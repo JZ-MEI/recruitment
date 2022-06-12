@@ -1,4 +1,4 @@
-var API = "http://192.168.10.111:8082/";
+var API = "http://localhost:8082/";
 
 layui.use(['jquery', 'layer'], function () {
     var $ = layui.jquery;

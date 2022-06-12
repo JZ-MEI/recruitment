@@ -13,5 +13,9 @@ public class PostInfo {
   private String workplace;
   private String recruitingNumber;
   private String postType;
+  private String isAudit;
+  private String auditName;
+  private String auditTime;
+  private String companyName;
 
 }

@@ -1,0 +1,27 @@
+.preview {
+    width: 300px;
+    height: 200px;
+    border: #000 1px solid;
+    float: left;
+    margin: 30px;
+    margin-top: 5px !important;
+    margin-bottom: 0 !important;
+    text-align: center;
+    line-height: 200px;
+}
+
+.previewDiv {
+    width: 1100px;
+    margin: 30px auto;
+    /* margin-bottom: 10px !important; */
+    /* border: #000 1px solid; */
+}
+
+.add {
+    /* margin: 0 auto !important; */
+    /* border: #000 1px solid; */
+    font-size: 50px;
+}
+.btn{
+    text-align: center;
+}

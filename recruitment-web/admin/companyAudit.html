@@ -17,9 +17,6 @@
         <table id="companyAudit" lay-filter="companyAudit"></table>
     </div>
     <script type="text/html" id="toolbarDemo">
-        <div class="layui-btn-container operationButton">
-            <button class="layui-btn layui-btn-sm" lay-event="add" id="add">添加</button>
-        </div>
         <div class="searchDiv">
             <input class="layui-input input" id="input">
             <button class="layui-icon layui-icon-search search" id="search"></button>
@@ -44,7 +41,7 @@
                     };
                 }
                 , height: 522
-                , url: 'admin/getCompany?username=' + username //数据接口
+                , url: 'admin/getCompany' //数据接口
                 , id: 'company'
                 , page: true //开启分页
                 , cols: [[ //表头
@@ -76,16 +73,13 @@
                     }
                 ]]
             });
-            $(document).on('click', '.audit', function () {
-                var date = $(this).attr('id');
-            });
             $(document).on('click', '.logo', function () {
                 var date = $(this).attr('src');
                 // console.log()
                 layer.open({
                     type: 1,
-                    title:'企业LOGO',
-                    content: '<img src='+date+' width="400px" height="400px" style="margin-left: 50px">', //这里content是一个普通的String
+                    title: '企业LOGO',
+                    content: '<img src=' + date + ' width="400px" height="400px" style="margin-left: 50px">', //这里content是一个普通的String
                     area: ['500px', '500px']
                 });
             })
@@ -94,11 +88,63 @@
                 // console.log()
                 layer.open({
                     type: 1,
-                    title:'营业执照',
-                    content: '<img src='+date+' width="400px" height="400px" style="margin-left: 50px">', //这里content是一个普通的String
+                    title: '营业执照',
+                    content: '<img src=' + date + ' width="400px" height="400px" style="margin-left: 50px">', //这里content是一个普通的String
                     area: ['500px', '500px']
                 });
-            })
+            });
+            $(document).on('click', '.audit', function () {
+                var date = $(this).attr('id');
+                console.log(date);
+                $.get("admin/auditPass?username=" + username + "&companyId=" + date, function (res) {
+                    location.reload();
+                })
+            });
+            $(document).on('click', '#search', function () {
+                table.reload('company', {
+                    elem: '#companyAudit'
+                    , toolbar: '#toolbarDemo'
+                    , parseData: function (res) { //res 即为原始返回的数据
+                        return {
+                            "code": res.responseCode, //解析接口状态
+                            "count": res.count,
+                            "data": res.data
+                        };
+                    }
+                    , height: 522
+                    , url: 'admin/getCompany?keyWord=' + document.getElementById('input').value//数据接口
+                    , id: 'post'
+                    , page: true //开启分页
+                    , cols: [[
+                        { field: 'companyName', title: '企业名称', align: 'center' },
+                        { field: 'address', title: '公司地址', align: 'center' },
+                        {
+                            field: 'logo',
+                            title: '公司标志',
+                            align: 'center',
+                            templet: function (res) {
+                                return '<img src=' + res.logo + ' class="logo" width="30px" height="30px">'
+                            }
+                        },
+                        {
+                            field: 'license',
+                            title: '营业执照',
+                            align: 'center',
+                            templet: function (res) {
+                                return '<img src=' + res.license + ' class="license" width="30px" height="30px">'
+                            }
+                        },
+                        {
+                            type: "normal",
+                            title: "操作",
+                            align: 'center',
+                            templet: function (res) {
+                                return '<button class="layui-btn layui-btn-sm audit" id=' + res.id + '>审核通过</button>'
+                            }
+                        }
+                    ]]
+                });
+            });
         });
     </script>
 </body>

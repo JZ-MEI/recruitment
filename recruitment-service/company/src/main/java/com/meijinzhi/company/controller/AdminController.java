@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -99,7 +100,7 @@ public class AdminController {
             StringBuilder sb = new StringBuilder();
             sb.append("您的验证码是：").append(verify).append("为保证您的财产安全，请勿将验证码告诉其他人");
             String emailMessage = sb.toString();
-            sendMailUtil.sendMail("1749092177@qq.com", userInfo.getEmail(), "您的验证码是", emailMessage);
+            sendMailUtil.sendMail("1749092177@qq.com", userInfo.getEmail(), "煤气罐招聘验证码", emailMessage);
             redisTemplate.opsForValue().set(userInfo.getEmail(), verify);
             msg.setResponseCode("0000");
             msg.setMessage("发送成功");
@@ -110,13 +111,13 @@ public class AdminController {
         return msg;
     }
     @RequestMapping("/getCompany")
-    public SendReturnMessage getCompany(int page,int limit){
+    public SendReturnMessage getCompany(int page,int limit,String keyWord){
         SendReturnMessage msg = SendReturnMessage.instance();
         try {
             msg.setResponseCode("0000");
             msg.setMessage("success");
-            msg.setData(adminInfoService.getCompanyInfo(page, limit));
-            msg.setCount(adminInfoService.getCompanyInfoCount());
+            msg.setData(adminInfoService.getCompanyInfo(page, limit,keyWord));
+            msg.setCount(adminInfoService.getCompanyInfoCount(keyWord));
         }catch (Exception e){
             msg.setResponseCode("9999");
             msg.setMessage("error");
@@ -124,9 +125,91 @@ public class AdminController {
         }
         return msg;
     }
-    @RequestMapping("auditPass")
+    @RequestMapping("/auditPass")
     public SendReturnMessage auditPass(String username,long companyId){
         SendReturnMessage msg=SendReturnMessage.instance();
+        try{
+            adminInfoService.audit(username, companyId);
+            msg.setResponseCode("0000");
+            msg.setMessage("success");
+        }catch (Exception e){
+            msg.setResponseCode("9999");
+            msg.setMessage("error");
+            e.printStackTrace();
+        }
+
+        return msg;
+    }
+    @RequestMapping("/getPost")
+    public SendReturnMessage getPost(String isAudit,int page,int limit,String keyWord){
+        SendReturnMessage msg=SendReturnMessage.instance();
+        try{
+            msg.setResponseCode("0000");
+            msg.setMessage("success");
+            msg.setData(adminInfoService.getAllPost(isAudit,page, limit,keyWord));
+            msg.setCount(adminInfoService.getAllPostCount(isAudit,keyWord));
+        }catch (Exception e){
+            msg.setResponseCode("9999");
+            msg.setMessage("error");
+            e.printStackTrace();
+        }
+        return msg;
+    }
+    @RequestMapping("/auditPost")
+    public SendReturnMessage auditPost(String username,long postId) {
+        SendReturnMessage msg = SendReturnMessage.instance();
+        try {
+            adminInfoService.auditPost(username, postId);
+            msg.setResponseCode("0000");
+            msg.setMessage("success");
+        } catch (Exception e) {
+            msg.setResponseCode("9999");
+            msg.setMessage("error");
+            e.printStackTrace();
+        }
+        return msg;
+    }
+    @RequestMapping("/getAdmin")
+    public SendReturnMessage getAdmin(int page,int limit,String keyWord) {
+        SendReturnMessage msg = SendReturnMessage.instance();
+        try {
+            msg.setData(adminInfoService.selectAdmin(page, limit, keyWord));
+            msg.setCount(adminInfoService.getAdminCount(keyWord));
+            msg.setResponseCode("0000");
+            msg.setMessage("success");
+        } catch (Exception e) {
+            msg.setResponseCode("9999");
+            msg.setMessage("error");
+            e.printStackTrace();
+        }
+        return msg;
+    }
+    @RequestMapping("/adminPass")
+    public SendReturnMessage adminPass(long adminId,String type) {
+        SendReturnMessage msg = SendReturnMessage.instance();
+        try {
+            adminInfoService.adminAudit(adminId,type);
+            msg.setResponseCode("0000");
+            msg.setMessage("success");
+        }catch (Exception e) {
+            msg.setResponseCode("9999");
+            msg.setMessage("error");
+            e.printStackTrace();
+        }
+        return msg;
+    }
+    @RequestMapping("/upload")
+    public SendReturnMessage upload(MultipartFile file,String index){
+        SendReturnMessage msg = SendReturnMessage.instance();
+        try {
+            adminInfoService.upload(file,index);
+            msg.setResponseCode("0000");
+            msg.setMessage("success");
+        }catch (Exception e) {
+            msg.setResponseCode("9999");
+            msg.setMessage("error");
+            e.printStackTrace();
+        }
         return msg;
     }
 }

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <link rel="stylesheet" href="layui/css/layui.css" />
+    <link rel="stylesheet" href="css/index.css">
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+    <div class="table">
+        <table id="adminAudit" lay-filter="adminAudit"></table>
+    </div>
+    <script type="text/html" id="toolbarDemo">
+        <div class="searchDiv">
+            <input class="layui-input input" id="input">
+            <button class="layui-icon layui-icon-search search" id="search"></button>
+        </div>
+    </script>
+    <script>
+        layui.use(['jquery', 'element', 'form', 'table', 'upload', 'layer'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                table = layui.table,
+                upload = layui.upload,
+                layer = layui.layer;
+            var username = window.sessionStorage.getItem("username");
+            table.render({
+                elem: '#adminAudit'
+                , toolbar: '#toolbarDemo'
+                , parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.responseCode, //解析接口状态
+                        "count": res.count,
+                        "data": res.data
+                    };
+                }
+                , height: 522
+                , url: 'admin/getAdmin' //数据接口
+                , id: 'admin'
+                , page: true //开启分页
+                , cols: [[ //表头
+                    { field: 'adminName', title: '管理员用户名', align: 'center' },
+                    { field: 'email', title: '邮箱', align: 'center' },
+                    { 
+                        field:'isAudit',
+                        title:'审核',
+                        align:'center',
+                        templet:function(res){
+                            if(res.isAudit==0){
+                                return '<button class="layui-btn layui-btn-sm audit" id=' + res.id + '>审核通过</button>'
+                            }else if(res.isAudit==1&&res.isSuper==0){
+                                return '<button class="layui-btn layui-btn-sm super" id=' + res.id + '>设为超级管理员</button>'
+                            }else{
+                                return '超级管理员'
+                            }
+                        }}
+                ]]
+            });
+            $(document).on('click', '.audit', function () {
+                var date = $(this).attr('id');
+                console.log(date);
+                $.get("admin/adminPass?adminId=" + date+'&type=audit', function (res) {
+                    location.reload();
+                })
+            });
+            $(document).on('click', '.super', function () {
+                var date = $(this).attr('id');
+                console.log(date);
+                $.get("admin/adminPass?adminId=" + date+'&type=super', function (res) {
+                    location.reload();
+                })
+            });
+            $(document).on('click', '#search', function () {
+                table.reload('admin', {
+                    elem: '#adminAudit'
+                    , toolbar: '#toolbarDemo'
+                    , parseData: function (res) { //res 即为原始返回的数据
+                        return {
+                            "code": res.responseCode, //解析接口状态
+                            "count": res.count,
+                            "data": res.data
+                        };
+                    }
+                    , height: 522
+                    , url: 'admin/getAdmin?keyWord='+document.getElementById('input').value //数据接口
+                    , id: 'admin'
+                    , page: true //开启分页
+                    , cols: [[ //表头
+                        { field: 'adminName', title: '管理员用户名', align: 'center' },
+                        { field: 'email', title: '邮箱', align: 'center' },
+                        {
+                            type: "normal",
+                            title: "操作",
+                            align: 'center',
+                            templet: function (res) {
+                                return '<button class="layui-btn layui-btn-sm audit" id=' + res.id + '>审核通过</button>'
+                            }
+                        }
+                    ]]
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

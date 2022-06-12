@@ -18,13 +18,69 @@
     </div>
     <script type="text/html" id="toolbarDemo">
         <div class="layui-btn-container operationButton">
-            <button class="layui-btn layui-btn-sm" lay-event="add" id="add">添加</button>
+            <button class="layui-btn layui-btn-sm" id="addBtn">添加</button>
         </div>
         <div class="searchDiv">
             <input class="layui-input input" id="input">
             <button class="layui-icon layui-icon-search search" id="search"></button>
         </div>
     </script>
+    <div style="display: none; width: 90%; margin-top: 30px;" id="addPost">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">职位名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="post" required lay-verify="required" placeholder="职位名称" autocomplete="off"
+                        class="layui-input" id="post">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">职位描述</label>
+                <div class="layui-input-block">
+                    <textarea name="workDescribe" placeholder="请输入内容" class="layui-textarea"
+                        id="workDescribe"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">月薪</label>
+                <div class="layui-input-block">
+                    <input type="text" name="pay" required lay-verify="required" placeholder="月薪" autocomplete="off"
+                        class="layui-input" id="pay">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">工作地点</label>
+                <div class="layui-input-block">
+                    <input type="text" name="workplace" required lay-verify="required" placeholder="工作地点"
+                        autocomplete="off" class="layui-input" id="workplace">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">招聘人数</label>
+                <div class="layui-input-block">
+                    <input type="text" name="recruitingNumber" required lay-verify="required" placeholder="招聘人数"
+                        autocomplete="off" class="layui-input" id="recruitingNumber">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">职位类型</label>
+                <div class="layui-input-block">
+                    <select name="type" lay-verify="required" id="type">
+                        <option value=""></option>
+                        <option value="IT·互联网">IT·互联网</option>
+                        <option value="金融">金融</option>
+                        <option value="房地产·建筑">房地产·建筑</option>
+                        <option value="教育培训">教育培训</option>
+                        <option value="娱乐传媒">娱乐传媒</option>
+                        <option value="医疗健康">医疗健康</option>
+                        <option value="法律咨询">法律咨询</option>
+                        <option value="供应链·物流">供应链·物流</option>
+                        <option value="采购贸易">采购贸易</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
     <script>
         layui.use(['jquery', 'element', 'form', 'table', 'upload'], function () {
             var $ = layui.jquery,
@@ -54,6 +110,18 @@
                     { field: 'workDescribe', title: '描述', align: 'center', edit: 'text' },
                     { field: 'recruitingNumber', title: '招聘人数', align: 'center', sort: true, edit: 'text' },
                     { field: 'postType', title: '岗位类型', align: 'center', edit: 'text' },
+                    {
+                        field: "isAudit",
+                        title: '审核结果',
+                        align: 'center',
+                        templet: function (res) {
+                            if (res.isAudit == 0) {
+                                return '<input type="checkbox" name="isAudit" lay-skin="switch" lay-text="已审核|未审核" disabled>'
+                            } else {
+                                return '<input type="checkbox" name="isAudit" lay-skin="switch" lay-text="已审核|未审核" checked disabled>'
+                            }
+                        }
+                    }
                 ]]
             });
             table.on('edit(myPost)', function (obj) { //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
@@ -68,6 +136,37 @@
                 $.get('post/updatePost?id=' + id + '&' + field + '=' + value, function (res) {
                     console.log(res);
                 });
+            });
+            $(document).on('click', '#addBtn', function (res) {
+                $.get('post/getAudit?username=' + username, function (res) {
+                    if (res.data.isAudit == 0) {
+                        layer.open({
+                        title: "提示",
+                        content: '您的企业信息未审核，请等待审核后重试',
+                        anim: 6,
+                        // closeBtn:2
+                    });
+                    } else {
+                        layer.open({
+                            type: 1,
+                            content: $('#addPost'),
+                            title: false,
+                            area: ['500px', '500px'],
+                            btn: ['确定'],
+                            yes: function () {
+                                var post = document.getElementById("post").value,
+                                    workDescribe = document.getElementById("workDescribe").value.split("\n").join("<br>"),
+                                    pay = document.getElementById("pay").value,
+                                    workplace = document.getElementById("workplace").value,
+                                    recruitingNumber = document.getElementById("recruitingNumber").value,
+                                    type = document.getElementById("type").value;
+                                $.get("post/add?company=" + username + "&post=" + post + "&workDescribe=" + workDescribe + "&pay=" + pay + "&workplace=" + workplace + "&recruitingNumber=" + recruitingNumber + "&postType=" + type, function () {
+                                    layer.msg("添加成功")
+                                })
+                            }
+                        })
+                    }
+                })
             });
             $(document).on('click', '#search', function (res) {
                 var keyWord = document.getElementById('input').value;
@@ -92,8 +191,24 @@
                         { field: 'workDescribe', title: '描述', align: 'center', edit: 'text' },
                         { field: 'recruitingNumber', title: '招聘人数', align: 'center', sort: true, edit: 'text' },
                         { field: 'postType', title: '岗位类型', align: 'center', edit: 'text' },
+                        { field: "isAudit", title: '审核结果', align: 'center' }
                     ]]
                 }))
+            });
+            $.get("post/getCompanyInfo?username=" + username, function (res) {
+                if (res.data.isAudit == 1 && res.data.isPush == 0) {
+                    layer.open({
+                        title: "提示",
+                        content: '您的企业信息已审核，现在可以发布职位了',
+                        anim: 6,
+                        // closeBtn:2
+                        yes: function (index, layero) {
+                            $.get("post/updatePush?username=" + username, function (res) { });
+                            layer.close(index);
+                        }
+                    });
+                }
+                console.log(res);
             });
         });
     </script>

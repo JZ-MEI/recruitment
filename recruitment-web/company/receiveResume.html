@@ -23,7 +23,7 @@
         </div>
     </script>
     <script>
-                layui.use(['jquery', 'element', 'form', 'table', 'upload'], function () {
+        layui.use(['jquery', 'element', 'form', 'table', 'upload'], function () {
             var $ = layui.jquery,
                 form = layui.form,
                 table = layui.table,
@@ -44,16 +44,17 @@
                 , url: 'post/receiveResume?username=' + username //数据接口
                 , page: true //开启分页
                 , cols: [[ //表头
-                    { field: 'post', title: '姓名', align: 'center' },
-                    { field: 'workplace', title: '性别', align: 'center'},
-                    { field: 'pay', title: '手机号', align: 'center'},
-                    { field: 'workDescribe', title: '电子邮箱', align: 'center' },
-                    { 
-                        field: 'recruitingNumber', 
-                        title: '简历', 
+                    { field: 'name', title: '姓名', align: 'center' },
+                    { field: 'sex', title: '性别', align: 'center' },
+                    { field: 'telephone', title: '手机号', align: 'center' },
+                    { field: 'email', title: '电子邮箱', align: 'center' },
+                    { field: 'post', title: '投递岗位', align: 'center' },
+                    {
+                        field: 'resumeFile',
+                        title: '简历',
                         align: 'center',
-                        templet:function(){
-                            return '<a>查看简历附件</a>'
+                        templet: function (res) {
+                            return '<a href='+res.resumeFile+'>查看简历附件</a>'
                         }
                     }
                 ]]

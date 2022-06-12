@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+    <link rel="stylesheet" href="layui/css/layui.css" />
+    <link rel="stylesheet" href="css/carousel.css">
+    <div class="previewDiv">
+        <div class="preview" id="preview1"><i class="layui-icon layui-icon-add-1 add"></i></div>
+        <div class="preview" id="preview2"><i class="layui-icon layui-icon-add-1 add"></i></div>
+        <div class="preview" id="preview3"><i class="layui-icon layui-icon-add-1 add"></i></div>
+        <div class="preview" id="preview4"><i class="layui-icon layui-icon-add-1 add"></i></div>
+        <div class="preview" id="preview5"><i class="layui-icon layui-icon-add-1 add"></i></div>
+        <div class="preview" id="preview6"><i class="layui-icon layui-icon-add-1 add"></i></div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="btn">
+        <button class="layui-btn" id="submit"><i class="layui-icon layui-icon-ok"></i>&nbsp;提交</button>
+    </div>
+    <script>
+        //注意：导航 依赖 element 模块，否则无法进行功能性操作
+        layui.use(['element', 'carousel', 'jquery', 'layer', 'upload'], function () {
+            var $ = layui.$,
+                element = layui.element,
+                carousel = layui.carousel,
+                jquery = layui.jquery,
+                layer = layui.layer,
+                upload = layui.upload;
+            upload.render({
+                elem: '#preview1' //绑定元素
+                , url: 'admin/upload' //上传接口
+                , choose: function (obj) {
+                    obj.preview(function (index, file, result) {
+                        document.getElementById("preview1").innerHTML = "<img src=" + result + " width='300px' height='198px'>"
+                        console.log(result); //得到文件base64编码，比如图片
+                    });
+                }
+                , data: {
+                    index: 1
+                }
+                , error: function () {
+                    //请求异常回调
+                }
+            });
+            upload.render({
+                elem: '#preview2' //绑定元素
+                , url: 'admin/upload' //上传接口
+                , choose: function (obj) {
+                    obj.preview(function (index, file, result) {
+                        document.getElementById("preview2").innerHTML = "<img src=" + result + " width='300px' height='300px'>"
+                        console.log(result); //得到文件base64编码，比如图片
+                    });
+                }
+                , data: {
+                    index: 1
+                }
+                , error: function () {
+                    //请求异常回调
+                }
+            });
+            upload.render({
+                elem: '#preview3' //绑定元素
+                , url: 'admin/upload' //上传接口
+                , choose: function (obj) {
+                    obj.preview(function (index, file, result) {
+                        document.getElementById("preview3").innerHTML = "<img src=" + result + " width='300px' height='300px'>"
+                        console.log(result); //得到文件base64编码，比如图片
+                    });
+                }
+                , data: {
+                    index: 1
+                }
+                , error: function () {
+                    //请求异常回调
+                }
+            });
+            upload.render({
+                elem: '#preview4' //绑定元素
+                , url: 'admin/upload' //上传接口
+                , choose: function (obj) {
+                    obj.preview(function (index, file, result) {
+                        document.getElementById("preview4").innerHTML = "<img src=" + result + " width='300px' height='300px'>"
+                        console.log(result); //得到文件base64编码，比如图片
+                    });
+                }
+                , data: {
+                    index: 1
+                }
+                , error: function () {
+                    //请求异常回调
+                }
+            });
+            upload.render({
+                elem: '#preview5' //绑定元素
+                , url: 'admin/upload' //上传接口
+                , choose: function (obj) {
+                    obj.preview(function (index, file, result) {
+                        document.getElementById("preview5").innerHTML = "<img src=" + result + " width='300px' height='300px'>"
+                        console.log(result); //得到文件base64编码，比如图片
+                    });
+                }
+                , data: {
+                    index: 1
+                }
+                , error: function () {
+                    //请求异常回调
+                }
+            });
+            upload.render({
+                elem: '#preview6' //绑定元素
+                , url: 'admin/upload' //上传接口
+                , choose: function (obj) {
+                    obj.preview(function (index, file, result) {
+                        document.getElementById("preview6").innerHTML = "<img src=" + result + " width='300px' height='300px'>"
+                        console.log(result); //得到文件base64编码，比如图片
+                    });
+                }
+                , data: {
+                    index: 1
+                }
+                , error: function () {
+                    //请求异常回调
+                }
+            });
+            $(document).on('click','#submit',function(){
+                layer.msg('提交成功');
+            })
+
+        });
+    </script>
+</body>
+
+</html>

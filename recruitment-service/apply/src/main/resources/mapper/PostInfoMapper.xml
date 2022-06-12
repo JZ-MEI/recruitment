@@ -4,19 +4,22 @@
     <select id="getAllPostByType" resultType="com.meijinzhi.apply.entity.PostInfo">
         select pi.*
         from post_info pi
+        where is_audit = 1
         <if test="type!=null and type!=''">
-            where pi.post_type=#{type}
+            and pi.post_type=#{type}
         </if>
     </select>
     <select id="getAllPost" resultType="com.meijinzhi.apply.entity.PostInfo">
         select pi.*
         from post_info pi
+        where pi.is_audit = 1
     </select>
     <select id="getPostByKeyWord" resultType="com.meijinzhi.apply.entity.PostInfo">
         select pi.*
         from post_info pi
         where pi.post like CONCAT('%', #{keyWord}, '%')
            or pi.work_describe like CONCAT('%', #{keyWord}, '%')
+            and is_audit = 1
     </select>
     <select id="getPostInfoById" resultType="com.meijinzhi.apply.entity.PostInfo">
         select *

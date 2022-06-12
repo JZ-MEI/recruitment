@@ -19,12 +19,46 @@
         select *
         from company_info
         where is_audit = '0'
-            limit #{start}
-            , #{limit}
+        <if test="keyWord!=null and keyWord!=''">
+            and company_name like CONCAT('%',#{keyWord},'%')
+        </if>
+        and license is not null
+        and logo is not null
+        limit #{start}
+        , #{limit}
     </select>
     <select id="getCompanyInfoCount" resultType="com.meijinzhi.company.entity.CompanyInfo">
         select *
         from company_info
         where is_audit = '0'
+        <if test="keyWord!=null and keyWord!=''">
+            and company_name like CONCAT('%',#{keyWord},'%')
+        </if>
+        and license is not null
+        and logo is not null
     </select>
+    <update id="audit" parameterType="java.lang.String">
+        update company_info
+        set is_audit='1',
+            audit_user=#{username},
+            audit_time=#{auditTime}
+        where id = #{companyId}
+    </update>
+    <select id="selectLogoById" resultType="java.lang.String">
+        select ci.logo
+        from company_info ci
+        where ci.id = #{id}
+    </select>
+    <select id="selectCompanyNameById" resultType="java.lang.String">
+        select ci.company_name
+        from company_info ci
+        where ci.id = #{id}
+    </select>
+    <update id="auditPost" parameterType="java.lang.String">
+        update post_info
+        set is_audit='1',
+            audit_name=#{username},
+            audit_time=#{auditTime}
+        where id = #{postId}
+    </update>
 </mapper>

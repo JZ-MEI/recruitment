@@ -18,4 +18,35 @@
             and pi.post like CONCAT('%',#{keyWord},'%')
         </if>
     </select>
+    <select id="getAllPost" resultType="com.meijinzhi.company.entity.PostInfo">
+        select pi.*
+        from post_info pi
+        <if test="isAudit!=null and isAudit!=''">
+            where is_audit=#{isAudit}
+        </if>
+        <if test="keyWord!=null and keyWord!=''">
+            where pi.post like CONCAT('%',#{keyWord},'%')
+        </if>
+        limit #{start}
+        , #{limit}
+    </select>
+    <select id="getAllPostCount" resultType="com.meijinzhi.company.entity.PostInfo">
+        select pi.*
+        from post_info pi
+        <if test="isAudit!=null and isAudit!=''">
+            where is_audit=#{isAudit}
+        </if>
+        <if test="keyWord!=null and keyWord!=''">
+            where pi.post like CONCAT('%',#{keyWord},'%')
+        </if>
+    </select>
+    <select id="getPostById" resultType="com.meijinzhi.company.entity.PostInfo">
+        select *
+        from post_info
+        where id = #{postId}
+    </select>
+    <insert id="insertPost" parameterType="com.meijinzhi.company.entity.PostInfo">
+        insert into post_info(company_id, pay, post, work_describe, workplace, recruiting_number, post_type)
+        values (#{companyId}, #{pay}, #{post}, #{workDescribe}, #{workplace}, #{recruitingNumber}, #{postType})
+    </insert>
 </mapper>

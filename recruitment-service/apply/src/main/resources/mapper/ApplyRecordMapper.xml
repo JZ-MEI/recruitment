@@ -5,4 +5,15 @@
         insert into apply_record(user_id, post_id)
         values (#{userId}, #{postId})
     </insert>
+    <select id="getRecordByUserId" resultType="com.meijinzhi.apply.entity.ApplyRecord">
+        select *
+        from apply_record
+        where user_id = #{userId} limit #{start}
+            , #{limit}
+    </select>
+    <select id="getRecordCount" resultType="com.meijinzhi.apply.entity.ApplyRecord">
+        select *
+        from apply_record
+        where user_id = #{userId}
+    </select>
 </mapper>

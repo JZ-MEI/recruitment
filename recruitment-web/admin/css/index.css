@@ -53,3 +53,11 @@
     line-height: 27px;
     height: 27px !important;
 }
+.screen{
+    float: left;
+    margin-left: 30px;
+}
+.super{
+    line-height: 27px;
+    height: 27px !important;
+}

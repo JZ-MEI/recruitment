@@ -5,6 +5,7 @@ import com.meijinzhi.company.dao.CompanyInfoMapper;
 import com.meijinzhi.company.dao.PostInfoMapper;
 import com.meijinzhi.company.dao.ResumeInfoMapper;
 import com.meijinzhi.company.entity.ApplyRecord;
+import com.meijinzhi.company.entity.CompanyInfo;
 import com.meijinzhi.company.entity.PostInfo;
 import com.meijinzhi.company.entity.ResumeInfo;
 import com.meijinzhi.company.service.PostInfoService;
@@ -52,10 +53,33 @@ public class PostInfoServiceImpl implements PostInfoService {
         List<ApplyRecord> applyRecords = applyRecordMapper.getApplyByCompany(companyInfoMapper.selectByUsername(username).getId());
         List<ResumeInfo> resumeInfos = new ArrayList<>();
         for (ApplyRecord applyRecord:applyRecords){
-            PostInfo postInfo = postInfoMapper.selectById(applyRecord.getPostId());
+            PostInfo postInfo = postInfoMapper.getPostById(String.valueOf(applyRecord.getPostId()));
             ResumeInfo resumeInfo = resumeInfoMapper.selectByUser(String.valueOf(applyRecord.getUserId()));
+            resumeInfo.setPost(postInfo.getPost());
+            resumeInfo.setResumeFile("http://localhost:9000/recruitment/resume/"+applyRecord.getUserId()+".pdf");
             resumeInfos.add(resumeInfo);
         }
         return resumeInfos;
+    }
+
+    @Override
+    public CompanyInfo getCompanyInfo(String username) {
+        return companyInfoMapper.selectByUsername(username);
+    }
+
+    @Override
+    public void updatePush(String username) {
+        CompanyInfo companyInfo=new CompanyInfo();
+        CompanyInfo companyInfo1 = companyInfoMapper.selectByUsername(username);
+        companyInfo.setId(companyInfo1.getId());
+        companyInfo.setIsPush("1");
+        companyInfoMapper.updateById(companyInfo);
+    }
+
+    @Override
+    public void add(PostInfo postInfo, String company) {
+        CompanyInfo companyInfo = companyInfoMapper.selectByUsername(company);
+        postInfo.setCompanyId(String.valueOf(companyInfo.getId()));
+        postInfoMapper.insertPost(postInfo);
     }
 }

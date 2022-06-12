@@ -356,8 +356,7 @@ body {
     float: left;
     margin-left: 20px;
     width: 150px;
-    margin-top: 9px;
-    /* height: 70px; */
+
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -367,20 +366,20 @@ body {
     float: left;
     margin-left: 20px;
     position: relative;
-    margin-top: 10px;
     font-size: 25px;
-    width: 150px;
+    width: 200px;
     color: orangered;
     /* border: #000 1px solid; */
 }
 
 .postType {
-    float: right;
+    float: left;
     /* position:relative; */
     /* margin-right: 10px; */
-    margin-top: 18px;
+    width: 80px;
+    /* margin-top: 5px; */
     font-size: 10px;
-    margin-right: 20px;
+    margin-left: 20px;
     color: gray;
     /* border: #000 1px solid; */
 }

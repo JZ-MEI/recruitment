@@ -9,7 +9,7 @@
     text-align: center;
     margin-top: 10px !important;
 }
-.img-preview{
+.logo-preview{
     width: 125px;
     height: 125px;
     text-align: center;
@@ -18,4 +18,14 @@
 }
 .preview{
     font-size: 50px;
+}
+.license-preview{
+    width: 125px;
+    height: 125px;
+    text-align: center;
+    border: #000 1px solid;
+    line-height: 125px;
+}
+.company{
+    margin-top: 30px;
 }

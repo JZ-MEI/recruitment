@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <link rel="stylesheet" href="layui/css/layui.css" />
+    <link rel="stylesheet" href="css/index.css">
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+    <div class="table">
+        <table id="postAudit" lay-filter="postAudit"></table>
+    </div>
+    <script type="text/html" id="toolbarDemo">
+        <div class="searchDiv">
+            <input class="layui-input input" id="input">
+            <button class="layui-icon layui-icon-search search" id="search"></button>
+        </div>
+        <div class="screen">
+            <a href="javascript:;" id="all">全部</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:;" id="audited">已审核</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:;" id="no">未审核</a>
+       </div>
+    </script>
+    <script>
+        layui.use(['jquery', 'element', 'form', 'table', 'upload', 'layer'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                table = layui.table,
+                upload = layui.upload,
+                layer = layui.layer;
+            var username = window.sessionStorage.getItem("username");
+            table.render({
+                elem: '#postAudit'
+                , toolbar: '#toolbarDemo'
+                , parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.responseCode, //解析接口状态
+                        "count": res.count,
+                        "data": res.data
+                    };
+                }
+                , height: 522
+                , url: 'admin/getPost'//数据接口
+                , id: 'post'
+                , page: true //开启分页
+                , cols: [[ //表头
+                    { field: 'companyName', title: '企业名称', align: 'center' },
+                    { field: 'post', title: '职位名称', align: 'center' },
+                    { field: 'pay', title: '月薪', align: 'center' },
+                    { field: 'postType', title: '职位类型', align: 'center' },
+                    { field: 'recruitingNumber', title: '招聘人数', align: 'center' },
+                    { field: 'workDescribe', title: '职位描述', align: 'center' },
+                    { field: 'workplace', title: '工作地点', align: 'center' },
+                    { field: 'auditName', title: '审核人', align: 'center' },
+                    { field: 'auditTime', title: '审核时间', align: 'center' },
+                    {
+                        field: 'isAudit',
+                        title: '是否审核',
+                        align: 'center',
+                        templet: function (res) {
+                            if (res.isAudit == 0) {
+                                return '<button class="layui-btn layui-btn-sm audit" id=' + res.id + '>审核通过</button>'
+                            } else {
+                                return '已审核'
+                            }
+                        }
+                    }
+                ]]
+            });
+            $(document).on('click', '.audit', function () {
+                var date = $(this).attr('id');
+                console.log(date);
+                $.get("admin/auditPost?username=" + username + "&postId=" + date, function (res) {
+                    location.reload();
+                })
+            });
+            $(document).on('click', '#all', function () {
+                table.reload('post', {
+                    elem: '#postAudit'
+                    , toolbar: '#toolbarDemo'
+                    , parseData: function (res) { //res 即为原始返回的数据
+                        return {
+                            "code": res.responseCode, //解析接口状态
+                            "count": res.count,
+                            "data": res.data
+                        };
+                    }
+                    , height: 522
+                    , url: 'admin/getPost'//数据接口
+                    , id: 'post'
+                    , page: true //开启分页
+                    , cols: [[ //表头
+                        { field: 'companyName', title: '企业名称', align: 'center' },
+                        { field: 'post', title: '职位名称', align: 'center' },
+                        { field: 'pay', title: '月薪', align: 'center' },
+                        { field: 'postType', title: '职位类型', align: 'center' },
+                        { field: 'recruitingNumber', title: '招聘人数', align: 'center' },
+                        { field: 'workDescribe', title: '职位描述', align: 'center' },
+                        { field: 'workplace', title: '工作地点', align: 'center' },
+                        { field: 'auditName', title: '审核人', align: 'center' },
+                        { field: 'auditTime', title: '审核时间', align: 'center' },
+                        {
+                            field: 'isAudit',
+                            title: '是否审核',
+                            align: 'center',
+                            templet: function (res) {
+                                if (res.isAudit == 0) {
+                                    return '<button class="layui-btn layui-btn-sm audit" id=' + res.id + '>审核通过</button>'
+                                } else {
+                                    return '已审核'
+                                }
+                            }
+                        }
+                    ]]
+                });
+            })
+            $(document).on('click', '#audited', function () {
+                table.reload('post', {
+                    elem: '#postAudit'
+                    , toolbar: '#toolbarDemo'
+                    , parseData: function (res) { //res 即为原始返回的数据
+                        return {
+                            "code": res.responseCode, //解析接口状态
+                            "count": res.count,
+                            "data": res.data
+                        };
+                    }
+                    , height: 522
+                    , url: 'admin/getPost?isAudit=1'//数据接口
+                    , id: 'post'
+                    , page: true //开启分页
+                    , cols: [[ //表头
+                        { field: 'companyName', title: '企业名称', align: 'center' },
+                        { field: 'post', title: '职位名称', align: 'center' },
+                        { field: 'pay', title: '月薪', align: 'center' },
+                        { field: 'postType', title: '职位类型', align: 'center' },
+                        { field: 'recruitingNumber', title: '招聘人数', align: 'center' },
+                        { field: 'workDescribe', title: '职位描述', align: 'center' },
+                        { field: 'workplace', title: '工作地点', align: 'center' },
+                        { field: 'auditName', title: '审核人', align: 'center' },
+                        { field: 'auditTime', title: '审核时间', align: 'center' },
+                        {
+                            field: 'isAudit',
+                            title: '是否审核',
+                            align: 'center',
+                            templet: function (res) {
+                                if (res.isAudit == 0) {
+                                    return '<button class="layui-btn layui-btn-sm audit" id=' + res.id + '>审核通过</button>'
+                                } else {
+                                    return '已审核'
+                                }
+                            }
+                        }
+                    ]]
+                });
+            })
+            $(document).on('click', '#no', function () {
+                table.reload('post', {
+                    elem: '#postAudit'
+                    , toolbar: '#toolbarDemo'
+                    , parseData: function (res) { //res 即为原始返回的数据
+                        return {
+                            "code": res.responseCode, //解析接口状态
+                            "count": res.count,
+                            "data": res.data
+                        };
+                    }
+                    , height: 522
+                    , url: 'admin/getPost?isAudit=0'//数据接口
+                    , id: 'post'
+                    , page: true //开启分页
+                    , cols: [[ //表头
+                        { field: 'companyName', title: '企业名称', align: 'center' },
+                        { field: 'post', title: '职位名称', align: 'center' },
+                        { field: 'pay', title: '月薪', align: 'center' },
+                        { field: 'postType', title: '职位类型', align: 'center' },
+                        { field: 'recruitingNumber', title: '招聘人数', align: 'center' },
+                        { field: 'workDescribe', title: '职位描述', align: 'center' },
+                        { field: 'workplace', title: '工作地点', align: 'center' },
+                        { field: 'auditName', title: '审核人', align: 'center' },
+                        { field: 'auditTime', title: '审核时间', align: 'center' },
+                        {
+                            field: 'isAudit',
+                            title: '是否审核',
+                            align: 'center',
+                            templet: function (res) {
+                                if (res.isAudit == 0) {
+                                    return '<button class="layui-btn layui-btn-sm audit" id=' + res.id + '>审核通过</button>'
+                                } else {
+                                    return '已审核'
+                                }
+                            }
+                        }
+                    ]]
+                });
+            });
+            $(document).on('click', '#search', function () {
+                table.reload('post', {
+                    elem: '#postAudit'
+                    , toolbar: '#toolbarDemo'
+                    , parseData: function (res) { //res 即为原始返回的数据
+                        return {
+                            "code": res.responseCode, //解析接口状态
+                            "count": res.count,
+                            "data": res.data
+                        };
+                    }
+                    , height: 522
+                    , url: 'admin/getPost?keyWord='+document.getElementById('input').value//数据接口
+                    , id: 'post'
+                    , page: true //开启分页
+                    , cols: [[ //表头
+                        { field: 'companyName', title: '企业名称', align: 'center' },
+                        { field: 'post', title: '职位名称', align: 'center' },
+                        { field: 'pay', title: '月薪', align: 'center' },
+                        { field: 'postType', title: '职位类型', align: 'center' },
+                        { field: 'recruitingNumber', title: '招聘人数', align: 'center' },
+                        { field: 'workDescribe', title: '职位描述', align: 'center' },
+                        { field: 'workplace', title: '工作地点', align: 'center' },
+                        { field: 'auditName', title: '审核人', align: 'center' },
+                        { field: 'auditTime', title: '审核时间', align: 'center' },
+                        {
+                            field: 'isAudit',
+                            title: '是否审核',
+                            align: 'center',
+                            templet: function (res) {
+                                if (res.isAudit == 0) {
+                                    return '<button class="layui-btn layui-btn-sm audit" id=' + res.id + '>审核通过</button>'
+                                } else {
+                                    return '已审核'
+                                }
+                            }
+                        }
+                    ]]
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

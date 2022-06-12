@@ -13,52 +13,124 @@
     <link rel="stylesheet" href="css/company.css">
     <script type="text/javascript" src="layui/layui.js"></script>
     <script type="text/javascript" src="js/config.js"></script>
-    <form class="layui-form" action="">
-        <div class="layui-form-item">
-            <label class="layui-form-label">公司名称</label>
-            <div class="layui-input-block">
-                <input type="text" name="companyName" required lay-verify="required" placeholder="请输入公司名称"
-                    autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">公司地址</label>
-            <div class="layui-input-block">
-                <input type="text" name="companyPlace" required lay-verify="required" placeholder="请输入公司地址"
-                    autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">公司LOGO</label>
-            <div class="img">
-                <div class="img-preview" id="img-preview">
-                    <i class="layui-icon layui-icon-add-1 preview"></i>
-                </div>
-                <div class="upload">
-                    <button class="layui-btn" id="upload">
-                        <i class="layui-icon">&#xe67c;</i>上传图片
-                    </button>
+    <div class="company">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">公司名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="companyName" required lay-verify="required" placeholder="请输入公司名称"
+                            autocomplete="off" class="layui-input" id="companyName">
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
-                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            <div class="layui-form-item">
+                <label class="layui-form-label">公司地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="companyPlace" required lay-verify="required" placeholder="请输入公司地址"
+                        autocomplete="off" class="layui-input" id="address">
+                </div>
             </div>
-        </div>
-    </form>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">公司LOGO</label>
+                    <div class="img">
+                        <div class="logo-preview" id="logo-preview">
+                            <i class="layui-icon layui-icon-add-1 preview" id="logo"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">营业执照</label>
+                        <div class="img">
+                            <div class="license-preview" id="license-preview">
+                                <i class="layui-icon layui-icon-add-1 preview" id="license"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-filter="formDemo" id="submit">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary" id="reset">重置</button>
+                </div>
+            </div>
+        </form>
+        <button id="uploadLogo" style="VISIBILITY: hidden">上传Logo</button>
+        <button id="uploadLicense" style="VISIBILITY: hidden">上传执照</button>
+    </div>
 
     <script>
         //Demo
-        layui.use('form', function () {
-            var form = layui.form;
+        layui.use(['form', 'laydate', 'upload', 'layer'], function () {
+            var $ = layui.$,
+                form = layui.form,
+                laydate = layui.laydate,
+                jquery = layui.jquery,
+                upload = layui.upload,
+                layer = layui.layer;
+            var user = sessionStorage.getItem("username");
+            upload.render({
+                elem: '#logo'
+                , url: 'user/setLogo'
+                , auto: false
+                , bindAction: '#uploadLogo'
+                , acceptMime: 'image/*'
+                , data: {
+                    username: function () {
+                        return user
+                    }
+                }
+                , choose: function (obj) {
+                    // logo-preview
+                    obj.preview(function (index, file, result) {
+                        document.getElementById("logo-preview").innerHTML = '<img src=' + result + ' width="125px" height="124px" id="logo"><br>'
+                    });
+                }
+                , done: function (res, index, upload) { //上传后的回调
 
-            //监听提交
-            form.on('submit(formDemo)', function (data) {
-                layer.msg(JSON.stringify(data.field));
-                return false;
-            });
+                }
+            })
+            upload.render({
+                elem: '#license'
+                , url: 'user/setLicense'
+                , auto: false
+                , bindAction: '#uploadLicense'
+                , acceptMime: 'image/*'
+                , data: {
+                    username: function () {
+                        return user
+                    }
+                }
+                , choose: function (obj) {
+                    // logo-preview
+                    obj.preview(function (index, file, result) {
+                        document.getElementById("license-preview").innerHTML = '<img src=' + result + ' width="125px" height="124px" id="license"><br>'
+                    });
+
+                }
+                , done: function (res, index, upload) { //上传后的回调
+
+                }
+            })
+            $(document).on('click', '#reset', function () {
+                document.getElementById("logo-preview").innerHTML = ' <i class="layui-icon layui-icon-add-1 preview" id="logo"></i>'
+                document.getElementById("license-preview").innerHTML = '<i class="layui-icon layui-icon-add-1 preview" id="license"></i>'
+                location.reload();
+            })
+            $(document).on('click', '#submit', function (res) {
+                var companyName = document.getElementById("companyName").value,
+                    address = document.getElementById("address").value;
+                $.get('user/updateCompanyInfo?username=' + user + '&companyName=' + companyName + '&address=' + address, function (res) {
+                    if (res.responseCode == 0000) {
+                        $('#uploadLogo').trigger('click');
+                        $('#uploadLicense').trigger('click');
+                    }
+                })
+                return false
+            })
         });
     </script>
 </body>

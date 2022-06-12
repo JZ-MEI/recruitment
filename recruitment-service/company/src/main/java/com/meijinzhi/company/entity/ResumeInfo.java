@@ -15,5 +15,6 @@ public class ResumeInfo {
   private String salaryExpectation;
   private long userId;
   private String photo;
-
+  private String post;
+  private String resumeFile;
 }

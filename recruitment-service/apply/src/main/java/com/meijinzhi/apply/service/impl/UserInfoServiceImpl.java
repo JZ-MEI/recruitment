@@ -1,6 +1,7 @@
 package com.meijinzhi.apply.service.impl;
 
 //import com.itextpdf.*;
+
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.meijinzhi.apply.dao.ResumeInfoMapper;
@@ -79,7 +80,7 @@ public class UserInfoServiceImpl implements UserInfoService {
                 resumeInfo.setUserId(userId);
                 resumeInfoMapper.updateById(resumeInfo);
             } else {
-                resumeInfo.setUserId(resumeInfoGet.getId());
+                resumeInfo.setUserId(userId);
                 resumeInfoMapper.insert(resumeInfo);
             }
             if (workExperiences.size() == 0) {
@@ -261,9 +262,6 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public void updatePhoto(MultipartFile file) throws Exception {
-//        BASE64Encoder encoder = new BASE64Encoder();
-////        String photo = encoder.encode(file.getBytes());
-//        String photo = "localhost:9000/recruitment/companyLogo/腾讯.jpg";
         ResumeInfo resumeInfo = new ResumeInfo();
         resumeInfo.setId(id);
 //        resumeInfo.setPhoto(photo);
@@ -272,13 +270,14 @@ public class UserInfoServiceImpl implements UserInfoService {
         List<WorkExperience> workExperience2 = workExperienceMapper.selectByUserId(userId);
         ResumeInfo resumeInfo1 = resumeInfoMapper.selectById(id);
 //        generateTempPDF(resumeInfo1, workExperience2);
-        picutre(workExperience2,resumeInfo1,file);
+        picutre(workExperience2, resumeInfo1, file);
     }
-    void picutre(List<WorkExperience> workExperiences,ResumeInfo resumeInfo,MultipartFile file) {
+
+    void picutre(List<WorkExperience> workExperiences, ResumeInfo resumeInfo, MultipartFile file) {
         try {
             DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-            StringBuilder sb=new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             for (WorkExperience workExperience : workExperiences) {
                 String startTime1 = workExperience.getStartTime();
                 String endTime1 = workExperience.getEndTime();
@@ -293,8 +292,8 @@ public class UserInfoServiceImpl implements UserInfoService {
             }
             String workExperience = sb.toString();
             Rectangle rectangle = new Rectangle(PageSize.A4);
-            Document document = new Document(rectangle, 30 , 30, 30, 30);
-            String pdfPath = "D:\\DevelopSoft\\apache-tomcat-8.5.78\\webapps\\recruitment\\resume\\"+resumeInfo.getUserId()+".pdf";   // PDF 的输出位置
+            Document document = new Document(rectangle, 30, 30, 30, 30);
+            String pdfPath = "D:\\DevelopSoft\\apache-tomcat-8.5.78\\webapps\\recruitment\\resume\\" + resumeInfo.getUserId() + ".pdf";   // PDF 的输出位置
             try {
                 PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfPath));
 //                PdfWriter writer = PdfWriter.getInstance(document, pdf);
@@ -303,43 +302,43 @@ public class UserInfoServiceImpl implements UserInfoService {
             }
             document.open();    // 打开文档对象
             BaseFont baseFont = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
-            Font size20Font=new Font(baseFont,20,Font.NORMAL);
-            Font size13Font=new Font(baseFont,13,Font.NORMAL);
+            Font size20Font = new Font(baseFont, 20, Font.NORMAL);
+            Font size13Font = new Font(baseFont, 13, Font.NORMAL);
             Image image = null;     // 声明图片对象
             try {
-                image=Image.getInstance(file.getBytes());// 取得图片对象
+                image = Image.getInstance(file.getBytes());// 取得图片对象
             } catch (BadElementException | IOException e) {
                 logger.error("实例化【图片】 - 失败！", e);
 
                 return;
             }
 //            Paragraph spacing =new Paragraph(80);
-            Paragraph title=new Paragraph();
-            Chunk titleChunk=new Chunk("煤气罐招聘在线简历",size20Font);
+            Paragraph title = new Paragraph();
+            Chunk titleChunk = new Chunk("煤气罐招聘在线简历", size20Font);
             title.add(titleChunk);
             title.setSpacingAfter(30);
-            Paragraph name=new Paragraph();
-            Chunk nameChunk=new Chunk("姓          名："+resumeInfo.getName(),size13Font);
+            Paragraph name = new Paragraph();
+            Chunk nameChunk = new Chunk("姓          名：" + resumeInfo.getName(), size13Font);
             name.add(nameChunk);
             name.setSpacingAfter(20);
-            Paragraph sex=new Paragraph();
-            Chunk sexChunk=new Chunk("性          别："+resumeInfo.getSex(),size13Font);
+            Paragraph sex = new Paragraph();
+            Chunk sexChunk = new Chunk("性          别：" + resumeInfo.getSex(), size13Font);
             sex.add(sexChunk);
             sex.setSpacingAfter(20);
-            Paragraph telephone=new Paragraph();
-            Chunk telephoneChunk=new Chunk("电话号码："+resumeInfo.getTelephone(),size13Font);
+            Paragraph telephone = new Paragraph();
+            Chunk telephoneChunk = new Chunk("电话号码：" + resumeInfo.getTelephone(), size13Font);
             telephone.add(telephoneChunk);
             telephone.setSpacingAfter(20);
-            Paragraph email=new Paragraph();
-            Chunk emailChunk=new Chunk("邮          箱："+resumeInfo.getEmail(),size13Font);
+            Paragraph email = new Paragraph();
+            Chunk emailChunk = new Chunk("邮          箱：" + resumeInfo.getEmail(), size13Font);
             email.add(emailChunk);
             email.setSpacingAfter(20);
-            Paragraph workExperiencePara=new Paragraph();
-            Chunk workExperienceChunk=new Chunk("工作经历："+workExperience,size13Font);
+            Paragraph workExperiencePara = new Paragraph();
+            Chunk workExperienceChunk = new Chunk("工作经历：" + workExperience, size13Font);
             workExperiencePara.add(workExperienceChunk);
             workExperiencePara.setSpacingAfter(20);
-            Paragraph introduce=new Paragraph();
-            Chunk introduceChunk=new Chunk("个人简介："+resumeInfo.getPersonalIntroduction(),size13Font);
+            Paragraph introduce = new Paragraph();
+            Chunk introduceChunk = new Chunk("个人简介：" + resumeInfo.getPersonalIntroduction(), size13Font);
             introduce.add(introduceChunk);
             introduce.setSpacingAfter(20);
             image.scaleAbsolute(87.5f, 122.5f);
@@ -360,13 +359,29 @@ public class UserInfoServiceImpl implements UserInfoService {
             }
 
             document.close();       // 关闭文档
-            UserInfo user=new UserInfo();
+            UserInfo user = new UserInfo();
             user.setId(userId);
-            user.setResume("http://192.168.10.111:9000/recruitment/resume/"+userId+".pdf");
+            user.setResume("http://localhost:9000/recruitment/resume/" + userId + ".pdf");
 //            encoder.encode(pdf);
             userInfoMapper.updateById(user);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public ResumeInfo getResume(String username) {
+        long id = userInfoMapper.selectByUsername(username).getId();
+        ResumeInfo resumeInfo = resumeInfoMapper.selectByUserId(id);
+        return resumeInfo;
+    }
+
+    @Override
+    public void uploadResume(MultipartFile file, String username) throws IOException {
+        String uploadPath="D:\\DevelopSoft\\apache-tomcat-8.5.78\\webapps\\recruitment\\resume";
+        long id = userInfoMapper.selectByUsername(username).getId();
+        String fileName=id+".pdf";
+        File localFile=new File(uploadPath+"\\"+fileName);
+        file.transferTo(localFile);
     }
 }

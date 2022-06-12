@@ -13,4 +13,6 @@ public interface UserInfoService {
     Boolean forget(UserInfo userInfo);
     void setResume(ResumeInfo resumeInfo, String[] companyName, String[] startTime, String[] endTime, String[] workDescribe, String username);
     void updatePhoto(MultipartFile file) throws Exception;
+    ResumeInfo getResume(String username);
+    void uploadResume(MultipartFile file,String username) throws IOException;
 }

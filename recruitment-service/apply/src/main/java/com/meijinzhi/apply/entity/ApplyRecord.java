@@ -8,4 +8,5 @@ public class ApplyRecord {
     private long id;
     private String userId;
     private String postId;
+    private String companyId;
 }

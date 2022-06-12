@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/user")
-public class UserController{
+public class UserController {
     private Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     UserInfoService userInfoService;
@@ -85,7 +85,7 @@ public class UserController{
                     msg.setResponseCode("9999");
                     msg.setMessage("用户名不存在或手机号错误");
                 }
-            }else{
+            } else {
                 msg.setResponseCode("9999");
                 msg.setMessage("验证码错误");
             }
@@ -105,7 +105,7 @@ public class UserController{
             StringBuilder sb = new StringBuilder();
             sb.append("您的验证码是：").append(verify).append("为保证您的财产安全，请勿将验证码告诉其他人");
             String emailMessage = sb.toString();
-            sendMailUtil.sendMail("1749092177@qq.com", userInfo.getEmail(), "网上商城验证码", emailMessage);
+            sendMailUtil.sendMail("1749092177@qq.com", userInfo.getEmail(), "煤气罐招聘验证码", emailMessage);
             redisTemplate.opsForValue().set(userInfo.getEmail(), verify);
             msg.setResponseCode("0000");
             msg.setMessage("发送成功");
@@ -115,38 +115,64 @@ public class UserController{
         }
         return msg;
     }
+
     @RequestMapping("/resume")
-    public SendReturnMessage saveResume(ResumeInfo resumeInfo,String[] companyName,String[] startTime,String[] endTime,String[] workDescribe,String username) {
+    public SendReturnMessage saveResume(ResumeInfo resumeInfo, String[] companyName, String[] startTime, String[] endTime, String[] workDescribe, String username) {
         SendReturnMessage msg = SendReturnMessage.instance();
-        try{
+        try {
             userInfoService.setResume(resumeInfo, companyName, startTime, endTime, workDescribe, username);
             msg.setResponseCode("0000");
             msg.setMessage("success");
-        }catch (Exception e){
+        } catch (Exception e) {
             msg.setResponseCode("9999");
             msg.setMessage("error");
-            logger.info("抛出异常",e);
+            logger.info("抛出异常", e);
         }
         return msg;
     }
+
     @RequestMapping("/photo")
-    public SendReturnMessage photo(MultipartFile file){
+    public SendReturnMessage photo(MultipartFile file) {
         SendReturnMessage msg = SendReturnMessage.instance();
-        try{
+        try {
             userInfoService.updatePhoto(file);
             msg.setResponseCode("0000");
             msg.setMessage("success");
-        }catch (Exception e){
+        } catch (Exception e) {
             msg.setResponseCode("9999");
             msg.setMessage("error");
-            logger.info("抛出异常",e);
+            logger.info("抛出异常", e);
         }
         return msg;
     }
-//    @RequestMapping("/resume")
-//    public SendReturnMessage saveResume(String fields){
-//        SendReturnMessage msg = SendReturnMessage.instance();
-////        logger.info(String.valueOf(jsonObject));
-//        return msg;
-//    }
+
+    @RequestMapping("/getResume")
+    public SendReturnMessage getResume(String username) {
+        SendReturnMessage msg = SendReturnMessage.instance();
+        try {
+            msg.setData(userInfoService.getResume(username));
+            msg.setResponseCode("0000");
+            msg.setMessage("success");
+        } catch (Exception e) {
+            msg.setResponseCode("9999");
+            msg.setMessage("error");
+            logger.info("抛出异常", e);
+        }
+        return msg;
+    }
+    @RequestMapping("uploadFile")
+    public SendReturnMessage uploadFile(MultipartFile file,String user) {
+        SendReturnMessage msg = SendReturnMessage.instance();
+        try {
+            userInfoService.uploadResume(file, user);
+            msg.setResponseCode("0000");
+            msg.setMessage("success");
+        } catch (Exception e) {
+            msg.setResponseCode("9999");
+            msg.setMessage("error");
+            logger.info("抛出异常", e);
+        }
+        return msg;
+    }
+
 }

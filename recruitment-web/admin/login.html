@@ -49,7 +49,7 @@
                 $.post('admin/login', data.field, function (res) {
                     layui.data('token', {key: 'Authorization', value: res.data});
                     layui.data('user', {key: 'info', value: res.data.username});
-                    sessionStorage.setItem('username',res.data.username);
+                    sessionStorage.setItem('username',res.data.adminName);
                     // console.log(res);
                     sessionStorage.setItem('isSuper',res.data.isSuper);
                     if (res.responseCode == "0000") {
@@ -59,7 +59,12 @@
                             content: res.message,
                             time: 0,
                             success: function () {
-                                window.location.href = 'index.html';
+                                if(res.data.isAudit==0){
+                                    layer.msg('您的账号未审核，请等待超级管理员审核后重试')
+                                }else{
+                                    window.location.href = 'index.html';
+                                }
+                                // console.log(res.data.isAudit)
                             }
                         });
                     } else {

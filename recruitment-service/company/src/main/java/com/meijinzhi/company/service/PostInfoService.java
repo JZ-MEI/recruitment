@@ -1,5 +1,6 @@
 package com.meijinzhi.company.service;
 
+import com.meijinzhi.company.entity.CompanyInfo;
 import com.meijinzhi.company.entity.PostInfo;
 import com.meijinzhi.company.entity.ResumeInfo;
 
@@ -14,4 +15,10 @@ public interface PostInfoService {
     void updatePost(PostInfo postInfo);
 
     List<ResumeInfo> getApply(String username);
+
+    CompanyInfo getCompanyInfo(String username);
+
+    void updatePush(String username);
+
+    void add(PostInfo postInfo,String company);
 }
