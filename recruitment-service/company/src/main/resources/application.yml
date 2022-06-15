@@ -6,7 +6,7 @@ spring:
     name: emall
     url: jdbc:mysql://127.0.0.1:3306/recruitment?useUnicode=true&useJDBCCompliantTimezoneShift=true&serverTimezone=UTC&characterEncoding=utf8
     username: root
-    password: meijinzhi159.
+    password: XXX
     type: com.alibaba.druid.pool.DruidDataSource
     drive-class-name: com.mysql.cj.jdbc.Driver
     initialSize: 5
@@ -16,9 +16,9 @@ spring:
     #QQ邮箱这不用改
     host: smtp.qq.com
     #你的邮箱
-    username: 1749092177@qq.com
+    username: XXX
     #你的授权码
-    password: mcrwqnnueiwufcci
+    password: XXX
     default-encoding: UTF-8
   redis:
     #redis服务器地址
